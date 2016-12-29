@@ -1,6 +1,6 @@
 webpackJsonp([1,2],{
 
-/***/ 179:
+/***/ 177:
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27,4 +27,4 @@ ReactDOM.render(ClientAppRoot('appState', 'en'), document.getElementById('app'))
 
 /***/ }
 
-},[179]);
+},[177]);

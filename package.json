@@ -72,6 +72,7 @@
     "sinon": "^1.17.6",
     "source-map-support": "^0.4.8",
     "style-loader": "^0.13.1",
+    "supertest": "^2.0.1",
     "terminate": "^2.0.0",
     "test-console": "^1.0.0",
     "tslint": "^4.2.0",
@@ -88,6 +89,7 @@
     "server-build:watch": "tsc -p app/server/tsconfig.json --watch",
     "run-server:watch": "AUTO_LAUNCH=true nodemon -d 1000 build/app/server/server-process.js",
     "start": "npm run build:watch & npm run run-server:watch",
+    "test:server:debug": "npm run server-build; chokidar --debounce 500 --initial ./build/app/server/**/*.js ./build/config/**/*.js ./build/shared/**/*.js ./build/app/server/*.js -c \"./node_modules/.bin/mocha node --inspect --debug-brk build/app/server/server-process.spec.js\"",
     "test:server": "npm run server-build; chokidar --debounce 500 --initial ./build/app/server/**/*.js ./build/config/**/*.js ./build/shared/**/*.js ./build/app/server/*.js -c \"mocha build/app/server/server-process.spec.js\""
   },
   "keywords": [],

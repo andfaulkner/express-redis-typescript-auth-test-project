@@ -6,3 +6,4 @@
 /// <reference path="modules/express/index.d.ts" />
 /// <reference path="modules/lodash/index.d.ts" />
 /// <reference path="modules/react/index.d.ts" />
+/// <reference path="modules/supertest/index.d.ts" />

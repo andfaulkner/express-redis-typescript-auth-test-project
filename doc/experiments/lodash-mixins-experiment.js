@@ -17,7 +17,8 @@ _.mixin({
     fourth: (coll) => coll[3],
     fifth: (coll) => coll[4],
     hasOverlap: (coll1, coll2) => _.some(coll1, (item) => _.includes(coll2, item)),
-    any: _.some
+    any: _.some,
+    all: _.every,
 });
 
 if (process.env.test === 'test') {
@@ -47,3 +48,5 @@ if (process.env.test === 'test') {
         expect(_.hasOverlap([1, 2, 3], [])).to.be.false
     });     
 }
+
+module.exports = _;
