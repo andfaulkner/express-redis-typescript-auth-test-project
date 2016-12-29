@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "target": "ES6",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "outDir": "./build",
+        "noImplicitAny": false,
+        "emitDecoratorMetadata": true,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "allowJs": true,
+        "jsx": "preserve",
+        "pretty": true
+    },
+    "exclude": [
+        "*.js",
+        "*.json"
+    ],
+    "include": [
+        "./server/**/*.ts",
+        "./typings/index.d.ts"
+    ]
+}
