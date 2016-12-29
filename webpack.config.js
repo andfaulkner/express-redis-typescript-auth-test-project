@@ -20,11 +20,22 @@ var LOG_LEVEL = process.env.LOG_LEVEL  || 'info';
 
 module.exports = {
     context: __dirname,
-    entry: __dirname + '/app/client/client-app-root.tsx',
+    performance: {
+        hints: "warning",
+        assetFilter: function(assetFilename) {
+            return !assetFilename.endsWith('vendor.js');
+        },
+    },
+    entry: {
+        main: __dirname + '/app/client/client-app-root.tsx',
+        vendor: ['react', 'react-dom'],
+    },
+
     output: {
         path: __dirname + '',
-        filename: 'build/app/client/client-app.js',
+        filename: 'build/app/client/[name].js',
     },
+
     module: {
         loaders: [
             {
@@ -88,6 +99,11 @@ module.exports = {
             // data passed to main hbs template
             data: configIndexHtml
         }),
+
+        new webpack.optimize.CommonsChunkPlugin({
+            names: ['vendor', 'manifest'] // Specify the common bundle's name.
+        }),
+
         new WebpackBuildStatusNotifier()
     ]
 };

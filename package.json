@@ -86,8 +86,9 @@
     "client-build:watch": "webpack --config webpack.config.js --watch",
     "server-build": "tsc -p app/server/tsconfig.json",
     "server-build:watch": "tsc -p app/server/tsconfig.json --watch",
-    "run-server:watch": "AUTO_LAUNCH=true nodemon build/app/server/server-process.js",
-    "start": "npm run-server:watch"
+    "run-server:watch": "AUTO_LAUNCH=true nodemon -d 1000 build/app/server/server-process.js",
+    "start": "npm run build:watch & npm run run-server:watch",
+    "test:server": "npm run server-build; chokidar --debounce 500 --initial ./build/app/server/**/*.js ./build/config/**/*.js ./build/shared/**/*.js ./build/app/server/*.js -c \"mocha build/app/server/server-process.spec.js\""
   },
   "keywords": [],
   "author": "",
