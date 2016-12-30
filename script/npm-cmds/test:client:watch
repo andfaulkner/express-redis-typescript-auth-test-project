@@ -1,7 +1,8 @@
 #!/usr/bin/env sh
 
-FILES_TO_WATCH='./build/app/client/**.js ./build/config/**.js ./build/shared/**.js ./build/app/client/**.js'
+### IMPORT HELPERS :: source $PWD/script/npm-cmds/helpers/npm-run-helpers.sh
 
+FILES_TO_WATCH='./build/app/client/**.js ./build/config/**.js ./build/shared/**.js ./build/app/client/**.js'
 MOCHA_CMD='mocha build/app/client/*.spec.js'
 
 ############################################## SCRIPT ##############################################

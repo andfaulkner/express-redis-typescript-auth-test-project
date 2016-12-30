@@ -17,10 +17,10 @@ import * as path from 'path';
 // const exportFromTestedFile = require('./');
 
 /********************************************* TESTS **********************************************/
-describe('test', function() {
-  it('exists', function() {
-    expect(true).to.equal(true);
-  });
+describe('client testing proof-of-concept', function() {
+    it('ran a chai+mocha test on the client code', function() {
+        expect(true).to.equal(true);
+    });
 });
 
 // Restore original process.argv

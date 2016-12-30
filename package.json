@@ -95,12 +95,12 @@
 
     "start":              "env NODE_PATH=./ npm run build:watch & npm run run:server:watch",
 
-    "test": "npm run test:server & npm run test:client",
+    "test":               "npm run test:server & npm run test:client",
     "test:client":        "script/npm-cmds/test:client",
     "test:client:watch":  "script/npm-cmds/test:client:watch",
     "test:server":        "script/npm-cmds/test:server",
     "test:server:watch":  "script/npm-cmds/test:server:watch",
-    "test:server:debug":  "env NODE_PATH=./ npm run build:server; chokidar --debounce 500 --initial ./build/app/server/**/*.js ./build/config/**/*.js ./build/shared/**/*.js ./build/app/server/*.js -c \"./node_modules/.bin/mocha node --inspect --debug-brk build/app/server/*.spec.js build/app/server/**/*.spec.js\""
+    "test:server:debug":  "script/npm-cmds/test:server:debug"
   },
   "keywords": [],
   "author": "",
