@@ -17,6 +17,7 @@ export const hashString = async (str) => {
             argon2d: true
             // raw: false, type: 'argon2id' //<<< using argon2id is essential: argon2i has a hole
         });
+        return hash;
     } catch (e) {
         const err = new HashGenerationError(
             'Failed to generate hash. ${e.name} :: ${e.message}',

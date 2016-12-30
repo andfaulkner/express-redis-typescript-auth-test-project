@@ -10,8 +10,8 @@ require("mocha");
 /************************************ IMPORT FILE TO BE TESTED ************************************/
 // const exportFromTestedFile = require('./');
 /********************************************* TESTS **********************************************/
-describe('test', function () {
-    it('exists', function () {
+describe('client testing proof-of-concept', function () {
+    it('ran a chai+mocha test on the client code', function () {
         expect(true).to.equal(true);
     });
 });

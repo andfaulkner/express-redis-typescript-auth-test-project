@@ -16,6 +16,7 @@ exports.hashString = (str) => __awaiter(this, void 0, void 0, function* () {
         const hash = yield argon2.hash(str, salt, {
             argon2d: true
         });
+        return hash;
     }
     catch (e) {
         const err = new error_objects_1.HashGenerationError('Failed to generate hash. ${e.name} :: ${e.message}', 'hash-credentials.ts', str, 'argon2', salt ? salt : '[no salt generated]');

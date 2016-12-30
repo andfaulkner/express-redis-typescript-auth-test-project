@@ -26,6 +26,7 @@ import { hashString } from './hash-credentials';
 describe('hashString', function() {
     it('exists', function() {
         expect(true).to.equal(true);
+        console.log(hashString('my_dumb_password'));
     });
 });
 

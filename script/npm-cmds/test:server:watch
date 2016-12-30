@@ -1,13 +1,12 @@
 #!/usr/bin/env sh
 
-FILES_TO_WATCH='./build/app/server/**.js ./build/config/**.js ./build/shared/**.js ./build/app/server/**.js'
+FILES_TO_WATCH='./build/app/server/** ./build/config/** ./build/shared/**'
 
-MOCHA_RUN_CMD="mocha build/app/server/*.spec.js build/app/server/**/*.spec.js"
-
-REBUILD_SERVER_ON_CHANGE="env NODE_PATH=./ npm run build:server:watch"
+MOCHA_RUN_CMD="mocha build/app/server/**.spec.js"
+REBUILD_SERVER_ON_CHANGE="npm run build:server:watch"
 
 ############################################## SCRIPT ##############################################
 #
 #   npm run test:server:watch
 #
-chokidar --debounce 1000 $FILES_TO_WATCH -c "$MOCHA_RUN_CMD" & $REBUILD_SERVER_ON_CHANGE
+$REBUILD_SERVER_ON_CHANGE & chokidar $FILES_TO_WATCH -c "$MOCHA_RUN_CMD"
