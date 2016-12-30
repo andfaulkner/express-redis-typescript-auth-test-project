@@ -20,14 +20,19 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 /************************************ IMPORT FILE TO BE TESTED ************************************/
-import { hashString } from './hash-credentials';
+import { buildWonkyHash } from './hash-credentials';
 
 /********************************************* TESTS **********************************************/
-describe('hashString', function() {
-    it('exists', async function() {
-        expect(true).to.equal(true);
-        const myHash = await hashString('my_dumb_password');
-        console.log(myHash);
+describe('buildWonkyHash', function() {
+    it('exists', function() {
+        expect(buildWonkyHash).to.exist;
+    });
+
+    it('builds a long, randomly-salted argon2 hash from a plain string', async function() {
+        const myHash = await buildWonkyHash('my_dumb_password');
+        console.log(myHash.length);
+        expect(myHash).to.be.a('string');
+        expect(myHash).to.have.length(86);
     });
 });
 

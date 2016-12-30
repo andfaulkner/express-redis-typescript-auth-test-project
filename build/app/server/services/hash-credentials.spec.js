@@ -15,12 +15,16 @@ const chai_1 = require("chai");
 /************************************ IMPORT FILE TO BE TESTED ************************************/
 const hash_credentials_1 = require("./hash-credentials");
 /********************************************* TESTS **********************************************/
-describe('hashString', function () {
+describe('buildWonkyHash', function () {
     it('exists', function () {
+        chai_1.expect(hash_credentials_1.buildWonkyHash).to.exist;
+    });
+    it('builds a long, randomly-salted argon2 hash from a plain string', function () {
         return __awaiter(this, void 0, void 0, function* () {
-            chai_1.expect(true).to.equal(true);
-            const myHash = yield hash_credentials_1.hashString('my_dumb_password');
-            console.log(myHash);
+            const myHash = yield hash_credentials_1.buildWonkyHash('my_dumb_password');
+            console.log(myHash.length);
+            chai_1.expect(myHash).to.be.a('string');
+            chai_1.expect(myHash).to.have.length(86);
         });
     });
 });

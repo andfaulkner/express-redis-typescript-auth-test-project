@@ -1,25 +1,45 @@
 #!/usr/bin/env node
 const inspect = require('util').inspect;
 const _ = require('lodash');
-const {expect} = require('chai');
+const { expect } = require('chai');
 
 _.mixin({
-    puts: (str) => {
-        console.log(`str: ${str}`);
-        return str;
-    },
-    secondLast: (coll) => coll[coll.length - 2],
-    thirdLast: (coll) => coll[coll.length - 3],
-    fourthLast: (coll) => coll[coll.length - 4],
-    fifthLast: (coll) => coll[coll.length - 5],
-    second: (coll) => coll[1],
-    third: (coll) => coll[2],
-    fourth: (coll) => coll[3],
-    fifth: (coll) => coll[4],
-    hasOverlap: (coll1, coll2) => _.some(coll1, (item) => _.includes(coll2, item)),
+    // aliases
     any: _.some,
     all: _.every,
+
+    // pass-through logger
+    puts: (...str) => {
+        console.log(...str);
+        return str;
+    },
+
+    // Sugar for accessing elements at the start and end of a collection
+    secondLast: (coll: string | any[]) => coll[coll.length - 2],
+    thirdLast: (coll: string | any[]) => coll[coll.length - 3],
+    fourthLast: (coll: string | any[]) => coll[coll.length - 4],
+    fifthLast: (coll: string | any[]) => coll[coll.length - 5],
+    second: (coll: string | any[]) => coll[1],
+    third: (coll: string | any[]) => coll[2],
+    fourth: (coll: string | any[]) => coll[3],
+    fifth: (coll: string | any[]) => coll[4],
+
+    // True if any element in the 1st collection is the same as any element in the 2nd
+    hasOverlap: (coll1: any[], coll2: any[]) => _.some(coll1, (item) => _.includes(coll2, item)),
+
+    // Insert item into array (coll) at given index (idx)
+    insertAt<T>: (coll: T[] | string, idx: number, item: T): T[] | string => {
+        let preppedArr = (typeof coll === 'string') ? coll.split('') : coll;
+        preppedArr.splice(idx, 0, item);
+        return preppedArr;
+    },
 });
+
+// function insertAt(arr, idx, item) {
+//     const newArr = arr;
+//     newArr.splice(idx, 0, item);
+//     return newArr;
+// }
 
 if (process.env.test === 'test') {
     const test = function(msg, tests) {

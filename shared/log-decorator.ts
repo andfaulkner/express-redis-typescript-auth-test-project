@@ -1,3 +1,9 @@
+/************************************************************************************************
+*
+*     TODO: CLEANUP REQUIRED
+* 
+*/
+
 import * as _ from 'lodash';
 
 /**
@@ -14,7 +20,7 @@ import * as _ from 'lodash';
  *   }
  * }
  *
- * TODO set it up to also log classes, params, etc.. AOP FTW!
+ * TODO set it up to also log classes, params, etc..
  * 
  */
 export function log() {

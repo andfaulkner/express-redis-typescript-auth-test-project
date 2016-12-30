@@ -146,11 +146,11 @@ export const HashGenerationError = (() => {
         this.algorithm = algorithm;
         this.salt = salt.toString();
 
-        console.error('${this.name}: Failed to generate hash of string: ${this.strBeingHashed}');
-        console.error('    Occurred in file:', this.filename);
-        console.error('    Algorithm attempted:', this.algorithm);
-        console.error('    Salt used in generation attempt:', this.salt);
-        console.error('    stack:', this.stack);
+        console.error(`${this.name}: Failed to generate hash of string: ${this.strBeingHashed}`);
+        console.error(`    Occurred in file:`, this.filename);
+        console.error(`    Algorithm attempted:`, this.algorithm);
+        console.error(`    Salt used in generation attempt:`, this.salt);
+        console.error(`    stack:`, this.stack);
     }
 
     HashGenerationError.prototype = Object.create(Error.prototype);

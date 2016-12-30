@@ -5,12 +5,17 @@ interface Console {
     assert(value: any, message?: string, ...optionalParams: any[]): void;
     dir(obj: any, options?: {showHidden?: boolean, depth?: number, colors?: boolean}): void;
     error(message?: any, ...optionalParams: any[]): void;
+    error(...params: any[]): void;
     info(message?: any, ...optionalParams: any[]): void;
+    info(...params: any[]): void;
     log(message?: any, ...optionalParams: any[]): void;
+    log(...params: any[]): void;
     time(label: string): void;
     timeEnd(label: string): void;
     trace(message?: any, ...optionalParams: any[]): void;
+    trace(...params: any[]): void;
     warn(message?: any, ...optionalParams: any[]): void;
+    warn(...params: any[]): void;
 }
 
 interface Error {
