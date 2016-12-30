@@ -1,8 +1,4 @@
-// there's a bug in the Node.d.ts file
-interface Error {
-    captureStackTrace: any;
-}
-
+"use strict";
 /**
  * Use when a crash is due to the data for the state store not loading
  * @param {string} file      file the error occurred in
@@ -12,8 +8,8 @@ interface Error {
  * @param {Object} appState  Full data store of the app at time of error.
  * @return {Object extends Error} new extended error object
  */
-export const StoreLoadError = (() => {
-    function StoreLoadError(file: string, fn: string, msg: string, urls: string[], appState) {
+exports.StoreLoadError = (() => {
+    function StoreLoadError(file, fn, msg, urls, appState) {
         Error.captureStackTrace(this);
         this.file = file;
         this.fn = fn;
@@ -26,11 +22,9 @@ export const StoreLoadError = (() => {
         console.error('url(s) receiving requests:', this.urls);
         console.error('stack:', this.stack);
     }
-
     StoreLoadError.prototype = Object.create(Error.prototype);
     return StoreLoadError;
 })();
-
 /**
  * Use when a crash is clearly due to the React UI not rendering
  * @param {string} file      file the error occurred in
@@ -39,8 +33,8 @@ export const StoreLoadError = (() => {
  * @param {Object} appState  Full data store of the app at time of error.
  * @return {Object extends Error} new extended error object
  */
-export const BuildReactUIError = (() => {
-    function BuildReactUIError(file: string, fn: string, msg: string, appState) {
+exports.BuildReactUIError = (() => {
+    function BuildReactUIError(file, fn, msg, appState) {
         Error.captureStackTrace(this);
         this.file = file;
         this.fn = fn;
@@ -52,11 +46,9 @@ export const BuildReactUIError = (() => {
         console.error('msg:', this.msg);
         console.error('stack:', this.stack);
     }
-
     BuildReactUIError.prototype = Object.create(Error.prototype);
     return BuildReactUIError;
 })();
-
 /**
  * Throw on attempts to run functionality-damaging dev code in production (e.g. returning
  * mock replacements for actual data).
@@ -67,17 +59,14 @@ export const BuildReactUIError = (() => {
  * @param {Object} mock      If returning mock data was involved, pass this the mock data.
  * @return {Object extends Error} new extended error object
  */
-export const DevCodeOnProdServerError = (() => {
-    function DevCodeOnProdServerError(file: string, fn: string,
-            msg: string, route?: string, mock?: any) {
+exports.DevCodeOnProdServerError = (() => {
+    function DevCodeOnProdServerError(file, fn, msg, route, mock) {
         Error.captureStackTrace(this);
-
         this.file = file;
         this.fn = fn;
         this.msg = msg;
         this.route = route;
         this.mock = mock;
-
         console.error('Attempted to run development code on production');
         console.error('file:', this.file);
         console.error('fn:', this.fn);
@@ -86,14 +75,11 @@ export const DevCodeOnProdServerError = (() => {
         if (mock) {
             console.error('mock:', this.mock);
         }
-
         console.error('stack:', this.stack);
     }
-
     DevCodeOnProdServerError.prototype = Object.create(Error.prototype);
     return DevCodeOnProdServerError;
 })();
-
 /**
  * Use when a crash is due to an unknown language being provided to a language-aware API
  *
@@ -103,16 +89,14 @@ export const DevCodeOnProdServerError = (() => {
  * @param {Object} appState  Full data store of the app at time of error.
  * @return {Object extends Error} new extended error object
  */
-export const UnknownLanguageError = (() => {
-    function UnknownLanguageError(file: string, fn: string, lang: string,
-                                  msg: string,  appState,   targetEl?) {
+exports.UnknownLanguageError = (() => {
+    function UnknownLanguageError(file, fn, lang, msg, appState, targetEl) {
         Error.captureStackTrace(this);
         this.file = file;
         this.fn = fn;
         this.lang = lang;
         this.msg = msg;
         this.appState = appState;
-
         console.error('Unknown language was provided:', lang);
         console.error('file:', this.file);
         console.error('fn:', this.fn);
@@ -121,23 +105,20 @@ export const UnknownLanguageError = (() => {
         console.error('appState:', this.appState);
         console.error('stack:', this.stack);
     }
-
     UnknownLanguageError.prototype = Object.create(Error.prototype);
     return UnknownLanguageError;
 })();
-
 /**
  * Use when an attempt to hash a string, Buffer, number, etc. fails.
- * 
+ *
  * @param {string} message        - error message
  * @param {string} filename       - file the error occurred in
  * @param {string} strBeingHashed - string the hashing was attempted on
  * @param {string} algorithm      - hash algorithm used
  * @param {string} salt           - salt used in the generation attempt
  */
-export const HashGenerationError = (() => {
-    function HashGenerationError(message: string, filename: string, strBeingHashed: string,
-                                 algorithm: string, salt: string | Buffer) {
+exports.HashGenerationError = (() => {
+    function HashGenerationError(message, filename, strBeingHashed, algorithm, salt) {
         Error.captureStackTrace(this);
         this.message = message;
         this.name = `HashGenerationError`;
@@ -145,14 +126,13 @@ export const HashGenerationError = (() => {
         this.strBeingHashed = strBeingHashed;
         this.algorithm = algorithm;
         this.salt = salt.toString();
-
         console.error('${this.name}: Failed to generate hash of string: ${this.strBeingHashed}');
         console.error('    Occurred in file:', this.filename);
         console.error('    Algorithm attempted:', this.algorithm);
         console.error('    Salt used in generation attempt:', this.salt);
         console.error('    stack:', this.stack);
     }
-
     HashGenerationError.prototype = Object.create(Error.prototype);
     return HashGenerationError;
 })();
+//# sourceMappingURL=error-objects.js.map

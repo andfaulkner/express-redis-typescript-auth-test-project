@@ -1,0 +1,16 @@
+1) hash incoming data
+2) create account (hash / username / password) db
+3) create session db
+4) create a few fake accounts in account db (w hashed passwords!)
+
+5) compare hash of incoming data against db accounts
+6) respond with login success or fail accordingly
+
+check  incoming request on protected route
+compare hash of incoming request
+
+
+4) store the hash
+5) set up hash expiry
+4) function to get the hash back from the db
+5) Set certain routes to require 

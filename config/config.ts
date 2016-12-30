@@ -9,3 +9,5 @@ export const config = {
         server: 8080
     },
 };
+
+console.log('ok');

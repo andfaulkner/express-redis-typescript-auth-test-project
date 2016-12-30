@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/b93dc24e1bb336852b9ad97509b84b90afe4e28a/argon2/index.d.ts",
+    "raw": "registry:dt/argon2#0.14.0+20161124085058",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/b93dc24e1bb336852b9ad97509b84b90afe4e28a/argon2/index.d.ts"
+  }
+}

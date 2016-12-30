@@ -15,6 +15,8 @@ const TAG = buildFileTag('[server-process.ts]', colors.white.bgBlack);
 
 import { authRouter } from './auth/auth-route';
 
+import { requestLogFactory } from './middlewares/log-requests';
+
 //******************************************** CONFIG *********************************************/
 import { config } from '../../config/config';
 
@@ -35,6 +37,7 @@ if (process.env.NODE_ENV !== 'production') {
 //******************************************** SERVER *********************************************/
 export const launchServer = (next) => {
     const app = express()
+        .use(requestLogFactory())
 
         /* MIDDLEWARES GO HERE - EXAMPLES DIRECTLY BELOW */
         .use('/', express.static(path.join(rootPath, 'build/app/client')))

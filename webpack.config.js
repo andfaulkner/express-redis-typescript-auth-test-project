@@ -32,7 +32,7 @@ module.exports = {
     },
 
     output: {
-        path: __dirname + '',
+        path: __dirname,
         filename: 'build/app/client/[name].js',
     },
 

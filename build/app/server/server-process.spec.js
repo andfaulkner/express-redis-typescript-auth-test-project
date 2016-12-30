@@ -8,7 +8,6 @@ const fs = require('fs');
 const path = require('path');
 const sinon = require('sinon');
 const mocha = require('mocha');
-const inspect = require('util').inspect;
 const { stderr, stdout } = require('test-console');
 const chai_1 = require("chai");
 const supertest = require("supertest");

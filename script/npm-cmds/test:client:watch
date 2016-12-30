@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+FILES_TO_WATCH='./build/app/client/**.js ./build/config/**.js ./build/shared/**.js ./build/app/client/**.js'
+
+MOCHA_CMD='mocha build/app/client/*.spec.js'
+
+############################################## SCRIPT ##############################################
+#
+#   npm run test:client:watch
+#
+env NODE_PATH=./ npm run build:client:watch;
+chokidar $FILES_TO_WATCH --debounce 2000 --initial -c $MOCHA_CMD

@@ -10,8 +10,9 @@ const path = require('path');
 
 const sinon = require('sinon');
 const mocha = require('mocha');
-const inspect = require('util').inspect;
 const { stderr, stdout } = require('test-console');
+
+import { inspect } from 'util';
 
 import { expect } from 'chai';
 import * as supertest from 'supertest';
@@ -29,7 +30,6 @@ const scriptTagRegex = /<script src=['"][a-zA-Z0-9\.-]+['"]>/;
 
 /********************************************* TESTS **********************************************/
 describe('launchServer', function() {
-
     it('exists', function() {
         expect(launchServer).to.exist;
     });
@@ -78,16 +78,20 @@ describe('launchServer', function() {
 
         describe('## Express instance returned by launchServer', function() {
             it('returns index.html on GET request to root path', function(done: Function) {
+
                 // make GET request to 'localhost:[PORT]/'
                 (supertest(expressApp) as any).get('/')
+
                     // ensure response was successful
                     .expect('Content-type', /text\/html/).expect(200)
+
                     // ensure body contains text indicating index.html
                     .expect(/<html>/)      .expect(/<\/html>/)
                     .expect(/<head>/)      .expect(/<\/head>/)
                     .expect(/<body>/)      .expect(/<\/body>/)
                     .expect(/<div id=/)    .expect(/<\/div>/)
                     .expect(scriptTagRegex).expect(/<\/script>/)
+
                     // ensure all expectations were met
                     .end(function(err: Error | null, res) {
                         expect(err).to.be.null;

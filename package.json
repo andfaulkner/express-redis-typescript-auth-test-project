@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "app-root-path": "^2.0.1",
+    "argon2": "^0.14.1",
     "babel-polyfill": "^6.20.0",
     "bluebird": "^3.4.7",
     "body-parser": "^1.15.2",
@@ -16,6 +17,7 @@
     "lodash": "^4.17.3",
     "mad-logs": "^3.1.1",
     "moment": "^2.17.1",
+    "morgan": "^1.7.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pg": "^6.1.2",
@@ -81,16 +83,22 @@
     "webpack": "2.2.0-rc.3"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:watch": "npm run client-build:watch & npm run server-build:watch",
-    "client-build": "webpack --config webpack.config.js",
-    "client-build:watch": "webpack --config webpack.config.js --watch",
-    "server-build": "tsc -p app/server/tsconfig.json",
-    "server-build:watch": "tsc -p app/server/tsconfig.json --watch",
-    "run-server:watch": "AUTO_LAUNCH=true nodemon -d 1000 build/app/server/server-process.js",
-    "start": "npm run build:watch & npm run run-server:watch",
-    "test:server:debug": "npm run server-build; chokidar --debounce 500 --initial ./build/app/server/**/*.js ./build/config/**/*.js ./build/shared/**/*.js ./build/app/server/*.js -c \"./node_modules/.bin/mocha node --inspect --debug-brk build/app/server/server-process.spec.js\"",
-    "test:server": "npm run server-build; chokidar --debounce 500 --initial ./build/app/server/**/*.js ./build/config/**/*.js ./build/shared/**/*.js ./build/app/server/*.js -c \"mocha build/app/server/server-process.spec.js\""
+    "build:watch":        "env NODE_PATH=./ npm run build:client:watch & npm run build:server:watch",
+    "build:client":       "env NODE_PATH=./ webpack --config webpack.config.js",
+    "build:client:watch": "env NODE_PATH=./ webpack --config webpack.config.js --watch",
+    "build:server":       "env NODE_PATH=./ tsc -p app/server/tsconfig.json",
+    "build:server:watch": "env NODE_PATH=./ tsc -p app/server/tsconfig.json --watch",
+    "build:client:tests": "env NODE_PATH=./ webpack --config webpack.config.js",
+
+    "run:server":         "env NODE_PATH=./ AUTO_LAUNCH=true node build/app/server/server-process.js",
+    "run:server:watch":   "env NODE_PATH=./ AUTO_LAUNCH=true nodemon build/app/server/server-process.js",
+
+    "start":              "env NODE_PATH=./ npm run build:watch & npm run run:server:watch",
+
+    "test": "npm run test:server & npm run test:client",
+    "test:client":        "script/npm-cmds/test:client",
+    "test:server":        "env NODE_PATH=./ npm run build:server; chokidar --debounce 500 --initial ./build/app/server/**/*.js ./build/config/**/*.js ./build/shared/**/*.js ./build/app/server/*.js -c \"mocha build/app/server/*.spec.js build/app/server/**/*.spec.js\"",
+    "test:server:debug":  "env NODE_PATH=./ npm run build:server; chokidar --debounce 500 --initial ./build/app/server/**/*.js ./build/config/**/*.js ./build/shared/**/*.js ./build/app/server/*.js -c \"./node_modules/.bin/mocha node --inspect --debug-brk build/app/server/*.spec.js build/app/server/**/*.spec.js\""
   },
   "keywords": [],
   "author": "",

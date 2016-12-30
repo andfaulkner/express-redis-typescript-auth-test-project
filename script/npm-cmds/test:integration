@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+FILES_TO_WATCH='./build/app/**.js ./build/config/**.js ./build/shared/**.js ./build/test/**.js'
+FILES_TO_WATCH_2=''
+
+############################################## SCRIPT ##############################################
+#
+#   npm run test:integration
+#
+env NODE_PATH=./ npm run build:client;
+
+tsc -p $PWD/app/client/tsconfig.json
+
+mocha build/app/client/**/*.spec.js
+mocha build/test/**/*.spec.js

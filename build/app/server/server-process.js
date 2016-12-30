@@ -11,6 +11,7 @@ const mad_logs_1 = require("mad-logs");
 /**************************************** PROJECT MODULES *****************************************/
 const TAG = mad_logs_1.buildFileTag('[server-process.ts]', colors.white.bgBlack);
 const auth_route_1 = require("./auth/auth-route");
+const log_requests_1 = require("./middlewares/log-requests");
 //******************************************** CONFIG *********************************************/
 const config_1 = require("../../config/config");
 //Ensure infinite number of concurrent sockets can be open
@@ -27,6 +28,7 @@ if (process.env.NODE_ENV !== 'production') {
 //******************************************** SERVER *********************************************/
 exports.launchServer = (next) => {
     const app = express()
+        .use(log_requests_1.requestLogFactory())
         .use('/', express.static(path.join(get_root_path_1.rootPath, 'build/app/client')))
         .use('/auth', auth_route_1.authRouter)
         .listen(config_1.config.port.server, function startServer() {
