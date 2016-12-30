@@ -2,7 +2,7 @@
 
 FILES_TO_WATCH='./build/app/server/**.js ./build/config/**.js ./build/shared/**.js ./build/app/server/**.js'
 
-MOCHA_RUN_CMD="./node_modules/.bin/mocha node --inspect --debug-brk build/app/server/**.spec.js"
+MOCHA_RUN_CMD="./node_modules/.bin/mocha node --inspect --debug-brk build/app/server/**.spec.js build/app/server/**/*.spec.js"
 
 REBUILD_SERVER_ON_CHANGE="env NODE_PATH=./ npm run build:server:watch"
 

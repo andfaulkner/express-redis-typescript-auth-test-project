@@ -24,9 +24,10 @@ import { hashString } from './hash-credentials';
 
 /********************************************* TESTS **********************************************/
 describe('hashString', function() {
-    it('exists', function() {
+    it('exists', async function() {
         expect(true).to.equal(true);
-        console.log(hashString('my_dumb_password'));
+        const myHash = await hashString('my_dumb_password');
+        console.log(myHash);
     });
 });
 

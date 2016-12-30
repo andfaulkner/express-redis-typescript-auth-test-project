@@ -7,4 +7,4 @@ source $PWD/script/npm-cmds/helpers/npm-run-helpers.sh
 #
 #   npm start     OR     npm run start
 #
-with_run_env build_all_watch & run_server_watch
+env NODE_PATH=./ build_all_watch & run_server_watch

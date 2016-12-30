@@ -5,6 +5,7 @@
 */
 "use strict";
 exports.config = {
+    appTitle: 'express-typescript-react-mobx-boilerplate',
     port: {
         server: 8080
     },

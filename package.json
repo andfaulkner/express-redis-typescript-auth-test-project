@@ -79,28 +79,26 @@
     "test-console": "^1.0.0",
     "tslint": "^4.2.0",
     "typescript": "^2.1.4",
+    "typescript-require": "^0.2.9-1",
     "typings": "^2.1.0",
     "webpack": "2.2.0-rc.3"
   },
   "scripts": {
-    "build:watch":        "env NODE_PATH=./ npm run build:client:watch & npm run build:server:watch",
-    "build:client":       "env NODE_PATH=./ webpack --config webpack.config.js",
+    "build:watch": "env NODE_PATH=./ npm run build:client:watch & npm run build:server:watch",
+    "build:client": "env NODE_PATH=./ webpack --config webpack.config.js",
     "build:client:watch": "env NODE_PATH=./ webpack --config webpack.config.js --watch",
-    "build:server":       "env NODE_PATH=./ tsc -p app/server/tsconfig.json",
+    "build:server": "env NODE_PATH=./ tsc -p app/server/tsconfig.json",
     "build:server:watch": "env NODE_PATH=./ tsc -p app/server/tsconfig.json --watch",
     "build:client:tests": "env NODE_PATH=./ webpack --config webpack.config.js",
-
-    "run:server":         "env NODE_PATH=./ AUTO_LAUNCH=true node build/app/server/server-process.js",
-    "run:server:watch":   "env NODE_PATH=./ AUTO_LAUNCH=true nodemon build/app/server/server-process.js",
-
-    "start":              "env NODE_PATH=./ npm run build:watch & npm run run:server:watch",
-
-    "test":               "npm run test:server & npm run test:client",
-    "test:client":        "script/npm-cmds/test:client",
-    "test:client:watch":  "script/npm-cmds/test:client:watch",
-    "test:server":        "script/npm-cmds/test:server",
-    "test:server:watch":  "script/npm-cmds/test:server:watch",
-    "test:server:debug":  "script/npm-cmds/test:server:debug"
+    "run:server": "env NODE_PATH=./ AUTO_LAUNCH=true node build/app/server/server-process.js",
+    "run:server:watch": "env NODE_PATH=./ AUTO_LAUNCH=true nodemon build/app/server/server-process.js",
+    "start": "env NODE_PATH=./ npm run build:watch & npm run run:server:watch",
+    "test": "npm run test:server & npm run test:client",
+    "test:client": "script/npm-cmds/test:client",
+    "test:client:watch": "script/npm-cmds/test:client:watch",
+    "test:server": "script/npm-cmds/test:server",
+    "test:server:watch": "script/npm-cmds/test:server:watch",
+    "test:server:debug": "script/npm-cmds/test:server:debug"
   },
   "keywords": [],
   "author": "",

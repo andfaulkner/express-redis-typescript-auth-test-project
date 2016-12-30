@@ -9,6 +9,8 @@ const configIndexHtml = require('./config/index-html-config');
 
 const WebpackBuildStatusNotifier = require('./config/webpack/werbpack-complete-notifier-plugin');
 
+const { config } = require('config/config');
+
 const buildPath = path.join(__dirname, 'build');
 const buildFilePath = (currentPath) => path.join(buildPath, currentPath);
 const srcPath = path.join(__dirname, './app/client');
@@ -17,6 +19,8 @@ const srcFilePath = (currentPath) => path.join(srcPath, currentPath);
 const babelrc = JSON.parse(fs.readFileSync(path.join(__dirname, './.babelrc')).toString());
 var NODE_ENV = process.env.NODE_ENV  || 'development';
 var LOG_LEVEL = process.env.LOG_LEVEL  || 'info';
+
+process.title = 
 
 module.exports = {
     context: __dirname,

@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 FILES_TO_WATCH='./build/app/client/** ./build/config/** ./build/shared/**'
-MOCHA_CMD="mocha build/app/client/**.spec.js"
+MOCHA_CMD="mocha build/app/client/**.spec.js build/app/client/**/*.spec.js"
 
 BUILD_TEST_ONCHANGE="tsc -p app/client/tsconfig.json --watch"
 BUILD_CLIENT_ONCHANGE="env NODE_PATH=./ npm run build:client:watch"
