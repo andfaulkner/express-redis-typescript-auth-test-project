@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+FILES_TO_WATCH='./build/app/server/**.js ./build/config/**.js ./build/shared/**.js ./build/app/server/**.js'
+
+############################################## SCRIPT ##############################################
+#
+#   npm run test:server
+#
+env NODE_PATH=./ npm run build:server
+mocha build/app/server/**.spec.js
