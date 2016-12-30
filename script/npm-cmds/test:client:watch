@@ -1,15 +1,13 @@
 #!/usr/bin/env sh
 
-### IMPORT HELPERS :: source $PWD/script/npm-cmds/helpers/npm-run-helpers.sh
-
 FILES_TO_WATCH='./build/app/client/** ./build/config/** ./build/shared/**'
-MOCHA_RUN_CMD="mocha build/app/client/**.spec.js"
+MOCHA_CMD="mocha build/app/client/**.spec.js"
 
-BUILD_TEST_ON_CHANGE="tsc -p app/client/tsconfig.json --watch"
+BUILD_TEST_ONCHANGE="tsc -p app/client/tsconfig.json --watch"
+BUILD_CLIENT_ONCHANGE="env NODE_PATH=./ npm run build:client:watch"
 
 ############################################## SCRIPT ##############################################
 #
 #   npm run test:client:watch
 #
-
-env NODE_PATH=./ npm run build:client:watch & $BUILD_TEST_ON_CHANGE & chokidar $FILES_TO_WATCH --debounce 2000 -c "$MOCHA_RUN_CMD"
+$BUILD_CLIENT_ONCHANGE & $BUILD_TEST_ONCHANGE & chokidar $FILES_TO_WATCH --debounce 2000 -c "$MOCHA_CMD"

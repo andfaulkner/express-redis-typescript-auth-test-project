@@ -27,3 +27,8 @@ build_all_watch() {
 run_server_watch() {
     npm run run:server:watch
 }
+
+###############################################################
+# They were imported like this:                               #
+#     source $PWD/script/npm-cmds/helpers/npm-run-helpers.sh  #
+###############################################################
