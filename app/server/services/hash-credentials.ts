@@ -51,14 +51,14 @@ export const buildWonkyHash = async (str: string) => {
     }
 };
 
-export const verifyPassVsHash = async (pass: string, storedHash: string) => {
+export const verifyPassVsHash = async (pass: string, storedHash: string): Promise<boolean> => {
     const stabilizedHash = await stabilizeHash(storedHash);
 
     if (await argon2.verify(stabilizedHash, pass)) {
         console.log('login success!');
-        return 'TODO login token or something here';
+        return true;
     }
 
     console.log('login failed :(');
-    return 'login failed - TODO set up redirect or something';
+    return false;
 };

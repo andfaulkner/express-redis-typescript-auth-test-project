@@ -5,13 +5,16 @@ const http = require("http");
 //Determine and store project root path
 const get_root_path_1 = require("./get-root-path");
 /************************************** THIRD-PARTY MODULES ***************************************/
-const express = require('express');
+const express = require("express");
+const helmet = require("helmet");
 const colors = require("colors");
 const mad_logs_1 = require("mad-logs");
 /**************************************** PROJECT MODULES *****************************************/
 const TAG = mad_logs_1.buildFileTag('[server-process.ts]', colors.white.bgBlack);
+// routes
 const auth_route_1 = require("./auth/auth-route");
-const log_requests_1 = require("./middlewares/log-requests");
+// middlewares
+const middlewares_1 = require("./middlewares/middlewares");
 //******************************************** CONFIG *********************************************/
 const config_1 = require("../../config/config");
 //Ensure infinite number of concurrent sockets can be open
@@ -25,12 +28,17 @@ if (process.env.NODE_ENV !== 'production') {
 //** Error handling module(s) here **/
 // const log = require('server/debug/winston-logger');
 // require('server/debug/uncaught-error-handler');
+//
+// tslint:disable-next-line
+//  TODO: proper global error handling. e.g. see: http://stackoverflow.com/questions/35550855/best-way-to-handle-exception-globally-in-node-js-with-express-4
+//
 //******************************************** SERVER *********************************************/
 exports.launchServer = (next) => {
     const app = express()
-        .use(log_requests_1.requestLogFactory())
-        .use('/', express.static(path.join(get_root_path_1.rootPath, 'build/app/client')))
+        .use(middlewares_1.requestLogFactory())
+        .use(helmet())
         .use('/auth', auth_route_1.authRouter)
+        .use('/', express.static(path.join(get_root_path_1.rootPath, 'build/app/client')))
         .listen(config_1.config.port.server, function startServer() {
         console.log('Server running: http://127.0.0.1:' + config_1.config.port.server + '/');
         console.log('Server process id (pid): ' + process.pid); //emit process ID

@@ -92,13 +92,13 @@ const mixins = _.mixin(_, {
 
     // Sugar for accessing elements at the start and end of a collection
     secondLast: (coll: string | any[]) => coll[coll.length - 2],
-    thirdLast: (coll: string | any[]) => coll[coll.length - 3],
+    thirdLast:  (coll: string | any[]) => coll[coll.length - 3],
     fourthLast: (coll: string | any[]) => coll[coll.length - 4],
-    fifthLast: (coll: string | any[]) => coll[coll.length - 5],
-    second: (coll: string | any[]) => coll[1],
-    third: (coll: string | any[]) => coll[2],
-    fourth: (coll: string | any[]) => coll[3],
-    fifth: (coll: string | any[]) => coll[4],
+    fifthLast:  (coll: string | any[]) => coll[coll.length - 5],
+    second:     (coll: string | any[]) => coll[1],
+    third:      (coll: string | any[]) => coll[2],
+    fourth:     (coll: string | any[]) => coll[3],
+    fifth:      (coll: string | any[]) => coll[4],
 
     // True if any element in the 1st collection is the same as any element in the 2nd
     hasOverlap: (coll1: any[], coll2: any[]) => _.some(coll1, (item) => _.includes(coll2, item)),

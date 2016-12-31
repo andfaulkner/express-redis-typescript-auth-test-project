@@ -9,5 +9,8 @@
     "morgan": "registry:dt/morgan#1.7.0+20160726064905",
     "react": "registry:npm/react#15.0.1+20160601175240",
     "supertest": "registry:dt/supertest#1.1.0+20161122042843"
+  },
+  "devDependencies": {
+    "helmet": "registry:dt/helmet#0.0.0+20161005184000"
   }
 }

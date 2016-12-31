@@ -20,7 +20,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 /************************************ IMPORT FILE TO BE TESTED ************************************/
-import { buildWonkyHash } from './hash-credentials';
+import { buildWonkyHash, verifyPassVsHash } from './hash-credentials';
 
 /********************************************* TESTS **********************************************/
 describe('buildWonkyHash', function() {
@@ -33,6 +33,25 @@ describe('buildWonkyHash', function() {
         console.log(myHash.length);
         expect(myHash).to.be.a('string');
         expect(myHash).to.have.length(86);
+    });
+});
+
+describe('verifyPassVsHash', function() {
+    let testHash;
+    before(async () => {
+        testHash = await buildWonkyHash('test123password');
+    });
+
+    it('exists', function() {
+        expect(verifyPassVsHash).to.exist;
+    });
+
+    it('returns true if given a string (password) and its matching hash', async function() {
+        expect(await verifyPassVsHash('test123password', testHash)).to.be.true;
+    });
+
+    it('returns false if given a string (password) and a non-matching hash', async function() {
+        expect(await verifyPassVsHash('_anotherTestPassword_', testHash)).to.be.false;
     });
 });
 

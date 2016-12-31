@@ -6,16 +6,20 @@ import * as http from 'http';
 import { rootPath } from './get-root-path';
 
 /************************************** THIRD-PARTY MODULES ***************************************/
-const express = require('express');
+import * as express from 'express';
+import * as helmet from 'helmet'
+
 import * as colors from 'colors';
 import { buildFileTag } from 'mad-logs';
 
 /**************************************** PROJECT MODULES *****************************************/
 const TAG = buildFileTag('[server-process.ts]', colors.white.bgBlack);
 
+// routes
 import { authRouter } from './auth/auth-route';
 
-import { requestLogFactory } from './middlewares/log-requests';
+// middlewares
+import { requestLogFactory } from './middlewares/middlewares';
 
 //******************************************** CONFIG *********************************************/
 import { config } from '../../config/config';
@@ -33,15 +37,22 @@ if (process.env.NODE_ENV !== 'production') {
 //** Error handling module(s) here **/
 // const log = require('server/debug/winston-logger');
 // require('server/debug/uncaught-error-handler');
+//
+// tslint:disable-next-line
+//  TODO: proper global error handling. e.g. see: http://stackoverflow.com/questions/35550855/best-way-to-handle-exception-globally-in-node-js-with-express-4
+//
 
 //******************************************** SERVER *********************************************/
 export const launchServer = (next) => {
     const app = express()
-        .use(requestLogFactory())
 
-        /* MIDDLEWARES GO HERE - EXAMPLES DIRECTLY BELOW */
-        .use('/', express.static(path.join(rootPath, 'build/app/client')))
+        //******* MIDDLEWARES *******//
+        .use(requestLogFactory())
+        .use(helmet())
+
+        //********* ROUTES *********//
         .use('/auth', authRouter)
+        .use('/', express.static(path.join(rootPath, 'build/app/client')))
 
         //Build Express app itself (loads & runs a constructor module), serve over web
         .listen(config.port.server, function startServer() {
@@ -49,6 +60,7 @@ export const launchServer = (next) => {
             console.log('Server process id (pid): ' + process.pid); //emit process ID
             return console.log('Wow. So server. Very running. Much bootup success. Such win.');
         });
+
     return next(app);
 };
 

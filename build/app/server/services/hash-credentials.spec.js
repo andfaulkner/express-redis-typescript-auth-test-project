@@ -28,5 +28,24 @@ describe('buildWonkyHash', function () {
         });
     });
 });
+describe('verifyPassVsHash', function () {
+    let testHash;
+    before(() => __awaiter(this, void 0, void 0, function* () {
+        testHash = yield hash_credentials_1.buildWonkyHash('test123password');
+    }));
+    it('exists', function () {
+        chai_1.expect(hash_credentials_1.verifyPassVsHash).to.exist;
+    });
+    it('returns true if given a string (password) and its matching hash', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            chai_1.expect(yield hash_credentials_1.verifyPassVsHash('test123password', testHash)).to.be.true;
+        });
+    });
+    it('returns false if given a string (password) and a non-matching hash', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            chai_1.expect(yield hash_credentials_1.verifyPassVsHash('_anotherTestPassword_', testHash)).to.be.false;
+        });
+    });
+});
 process.argv = Object.assign({}, oldProcArgs); // Restore original process.argv
 //# sourceMappingURL=hash-credentials.spec.js.map

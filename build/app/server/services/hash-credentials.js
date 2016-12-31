@@ -49,9 +49,9 @@ exports.verifyPassVsHash = (pass, storedHash) => __awaiter(this, void 0, void 0,
     const stabilizedHash = yield stabilizeHash(storedHash);
     if (yield argon2.verify(stabilizedHash, pass)) {
         console.log('login success!');
-        return 'TODO login token or something here';
+        return true;
     }
     console.log('login failed :(');
-    return 'login failed - TODO set up redirect or something';
+    return false;
 });
 //# sourceMappingURL=hash-credentials.js.map
