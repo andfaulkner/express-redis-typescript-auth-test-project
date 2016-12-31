@@ -5,6 +5,7 @@ import * as fs from 'fs';
 
 import * as express from 'express';
 import * as argon2 from 'argon2';
+import * as CryptoJS from 'crypto-js';
 
 /**************************************** PROJECT MODULES *****************************************/
 import { _ } from '../../../shared/lodash-mixins';
@@ -29,8 +30,8 @@ function extractChar(hash: string, extractPosition: number): string {
     return hashArr.join('');
 }
 
-async function stabilizeHash(hash: string) {
-    return hashInfo + extractChar(extractChar(hash, 16), 5);
+async function stabilizeHash(hash: string, prependHashInfo: boolean = false) {
+    return ((prependHashInfo) ? hashInfo : '') + extractChar(extractChar(hash, 16), 12);
 }
 
 /******************************************** EXPORTS *********************************************/
@@ -40,8 +41,7 @@ export const buildWonkyHash = async (str: string) => {
     try {
         salt = await argon2.generateSalt(30);
         const hash = await argon2.hash(str, salt, { argon2d: true });
-        const rawHash: string = _.last(hash.split(hashInfo))
-        return injectRandom(injectRandom(rawHash, 5), 16);
+        return injectRandom(injectRandom(hash, 12), 16);
 
     } catch (e) {
         const err = new HashGenerationError(
@@ -51,8 +51,20 @@ export const buildWonkyHash = async (str: string) => {
     }
 };
 
-export const verifyPassVsHash = async (pass: string, storedHash: string): Promise<boolean> => {
-    const stabilizedHash = await stabilizeHash(storedHash);
+
+
+type VerifyPassVsHashFunc = (pass: string, hash: string, prependInfo?: boolean) => Promise<boolean>;
+
+/**
+ * Verify that the result of running the given string (password) through the
+ * hash algorithm matches the given hash
+ * @param  {string}           pass - string to run through the hash algorithm
+ * @param  {string}           hash - hash to compare against
+ * @return {Promise<boolean>} resolves to true if the hash of the given string
+ *                            matches the given hash. Otherwise resolves false.
+ */
+export const verifyPassVsHash: VerifyPassVsHashFunc = async (pass, hash, prependInfo = false) => {
+    const stabilizedHash = await stabilizeHash(hash);
 
     if (await argon2.verify(stabilizedHash, pass)) {
         console.log('login success!');
@@ -61,4 +73,29 @@ export const verifyPassVsHash = async (pass: string, storedHash: string): Promis
 
     console.log('login failed :(');
     return false;
+};
+
+/**
+ * Convert a string to base64url format.
+ * @param {string} str - string to convert to base64url format
+ * @return {string} base64url version of the inputted string
+ */
+export const toBase64url = (source: string) => {
+    // Encode in classical base64
+    let encodedSource = new Buffer(source).toString('base64');
+
+    // Remove padding equal characters, then replace chars according to base64url specs
+    encodedSource = encodedSource.replace(/=+$/, '')
+                                 .replace(/\+/g, '-')
+                                 .replace(/\//g, '_');
+    return encodedSource;
+};
+
+/**
+ * Convert a string to base64 format.
+ * @param {string} str - string to convert to base64 format
+ * @return {string} base64 version of the inputted string
+ */
+export const toBase64 = (str: string) => {
+    return new Buffer(str).toString('base64');
 };

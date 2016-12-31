@@ -4,6 +4,7 @@
     "argon2": "registry:dt/argon2#0.14.0+20161124085058",
     "body-parser": "registry:dt/body-parser#0.0.0+20160726204056",
     "chai": "registry:npm/chai#3.5.0+20160723033700",
+    "crypto-js": "registry:dt/crypto-js#3.1.4+20160727175746",
     "express": "registry:npm/express#4.14.0+20160925001530",
     "lodash": "registry:npm/lodash#4.0.0+20161015015725",
     "morgan": "registry:dt/morgan#1.7.0+20160726064905",
@@ -11,6 +12,7 @@
     "supertest": "registry:dt/supertest#1.1.0+20161122042843"
   },
   "devDependencies": {
-    "helmet": "registry:dt/helmet#0.0.0+20161005184000"
+    "helmet": "registry:dt/helmet#0.0.0+20161005184000",
+    "jsonwebtoken": "registry:dt/jsonwebtoken#7.2.0+20161229235100"
   }
 }

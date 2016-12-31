@@ -7,6 +7,7 @@
 /// <reference path="modules/body-parser/index.d.ts" />
 /// <reference path="modules/express/index.d.ts" />
 /// <reference path="modules/helmet/index.d.ts" />
+/// <reference path="modules/jsonwebtoken/index.d.ts" />
 /// <reference path="modules/lodash/index.d.ts" />
 /// <reference path="modules/morgan/index.d.ts" />
 /// <reference path="modules/react/index.d.ts" />

@@ -26,9 +26,9 @@ function extractChar(hash, extractPosition) {
     hashArr.splice(extractPosition, 1);
     return hashArr.join('');
 }
-function stabilizeHash(hash) {
+function stabilizeHash(hash, prependHashInfo = false) {
     return __awaiter(this, void 0, void 0, function* () {
-        return hashInfo + extractChar(extractChar(hash, 16), 5);
+        return ((prependHashInfo) ? hashInfo : '') + extractChar(extractChar(hash, 16), 12);
     });
 }
 /******************************************** EXPORTS *********************************************/
@@ -37,16 +37,23 @@ exports.buildWonkyHash = (str) => __awaiter(this, void 0, void 0, function* () {
     try {
         salt = yield argon2.generateSalt(30);
         const hash = yield argon2.hash(str, salt, { argon2d: true });
-        const rawHash = lodash_mixins_1._.last(hash.split(hashInfo));
-        return injectRandom(injectRandom(rawHash, 5), 16);
+        return injectRandom(injectRandom(hash, 12), 16);
     }
     catch (e) {
         const err = new error_objects_1.HashGenerationError(`Failed to generate hash. ${e.name} :: ${e.message}`, 'hash-credentials.ts', str, 'argon2', salt ? salt : '[no salt generated]');
         throw err;
     }
 });
-exports.verifyPassVsHash = (pass, storedHash) => __awaiter(this, void 0, void 0, function* () {
-    const stabilizedHash = yield stabilizeHash(storedHash);
+/**
+ * Verify that the result of running the given string (password) through the
+ * hash algorithm matches the given hash
+ * @param  {string}           pass - string to run through the hash algorithm
+ * @param  {string}           hash - hash to compare against
+ * @return {Promise<boolean>} resolves to true if the hash of the given string
+ *                            matches the given hash. Otherwise resolves false.
+ */
+exports.verifyPassVsHash = (pass, hash, prependInfo = false) => __awaiter(this, void 0, void 0, function* () {
+    const stabilizedHash = yield stabilizeHash(hash);
     if (yield argon2.verify(stabilizedHash, pass)) {
         console.log('login success!');
         return true;
@@ -54,4 +61,26 @@ exports.verifyPassVsHash = (pass, storedHash) => __awaiter(this, void 0, void 0,
     console.log('login failed :(');
     return false;
 });
+/**
+ * Convert a string to base64url format.
+ * @param {string} str - string to convert to base64url format
+ * @return {string} base64url version of the inputted string
+ */
+exports.toBase64url = (source) => {
+    // Encode in classical base64
+    let encodedSource = new Buffer(source).toString('base64');
+    // Remove padding equal characters, then replace chars according to base64url specs
+    encodedSource = encodedSource.replace(/=+$/, '')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_');
+    return encodedSource;
+};
+/**
+ * Convert a string to base64 format.
+ * @param {string} str - string to convert to base64 format
+ * @return {string} base64 version of the inputted string
+ */
+exports.toBase64 = (str) => {
+    return new Buffer(str).toString('base64');
+};
 //# sourceMappingURL=hash-credentials.js.map
