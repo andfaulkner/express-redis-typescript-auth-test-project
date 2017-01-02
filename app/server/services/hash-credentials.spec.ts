@@ -20,25 +20,26 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 /************************************ IMPORT FILE TO BE TESTED ************************************/
-import { buildWonkyHash, verifyPassVsHash, toBase64, toBase64url } from './hash-credentials';
+import { generateHash, verifyPassVsHash, toBase64, toBase64url } from './hash-credentials';
 
 /********************************************* TESTS **********************************************/
-describe('buildWonkyHash', function() {
+describe('generateHash', function() {
     it('exists', function() {
-        expect(buildWonkyHash).to.exist;
+        expect(generateHash).to.exist;
     });
 
     it('builds a long, randomly-salted argon2 hash from a plain string', async function() {
-        const testHash = await buildWonkyHash('my_dumb_password');
+        const testHash = await generateHash('my_dumb_password');
         expect(testHash).to.be.a('string');
-        expect(testHash).to.have.length(115);
+        expect(testHash).to.have.length(127);
+        console.log(testHash);
     });
 });
 
 describe('verifyPassVsHash', function() {
     let testHash;
     before(async () => {
-        testHash = await buildWonkyHash('test123password');
+        testHash = await generateHash('test123password');
     });
 
     it('exists', function() {

@@ -18,7 +18,9 @@ interface lodashExtended extends _.LoDashStatic{
 
     flattenObjectOnce: (obj: {}) => {};
     hasOverlap: (coll1: any[], coll2: any[]) => boolean;
+
     insertAt: (coll: any[] | string, idx: number, item: any | string) => any[] | string;
+    extractChar: (str: string, extractPosition: number) => string;
 
     secondLast: ExtractOneFromColl;
     thirdLast:  ExtractOneFromColl;
@@ -108,6 +110,12 @@ const mixins = _.mixin(_, {
         let preppedArr = (typeof coll === 'string') ? coll.split('') : coll;
         preppedArr.splice(idx, 0, item);
         return (typeof coll === 'string') ? preppedArr.join('') : preppedArr;
+    },
+
+    extractChar: (str: string, extractPosition: number): string => {
+        const strArr = str.split('');
+        strArr.splice(extractPosition, 1);
+        return strArr.join('');
     },
 
     randomAlphanumerics: (numAlphanumToCreate: number = 1): string => {

@@ -8,6 +8,9 @@
     "express": "registry:npm/express#4.14.0+20160925001530",
     "lodash": "registry:npm/lodash#4.0.0+20161015015725",
     "morgan": "registry:dt/morgan#1.7.0+20160726064905",
+    "passport-jwt": "registry:dt/passport-jwt#2.0.0+20160428045346",
+    "passport-local": "registry:dt/passport-local#1.0.0+20161128184045",
+    "passport-strategy": "registry:npm/passport-strategy#1.0.0+20161027023236",
     "react": "registry:npm/react#15.0.1+20160601175240",
     "supertest": "registry:dt/supertest#1.1.0+20161122042843"
   },

@@ -62,6 +62,11 @@ const mixins = _.mixin(_, {
         preppedArr.splice(idx, 0, item);
         return (typeof coll === 'string') ? preppedArr.join('') : preppedArr;
     },
+    extractChar: (str, extractPosition) => {
+        const strArr = str.split('');
+        strArr.splice(extractPosition, 1);
+        return strArr.join('');
+    },
     randomAlphanumerics: (numAlphanumToCreate = 1) => {
         return _.times(numAlphanumToCreate, () => _.sample(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
             'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B',

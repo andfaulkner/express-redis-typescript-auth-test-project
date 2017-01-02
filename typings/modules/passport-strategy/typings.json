@@ -1,0 +1,10 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/types/npm-passport-strategy/707999fe332c7372f21fad3fcd2639b0b0adcf29/typings.json",
+    "raw": "registry:npm/passport-strategy#1.0.0+20161027023236",
+    "main": "lib/index.d.ts",
+    "version": "1.0.0",
+    "name": "passport-strategy"
+  }
+}

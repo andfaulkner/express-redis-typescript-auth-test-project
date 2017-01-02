@@ -22,92 +22,98 @@ var LOG_LEVEL = process.env.LOG_LEVEL  || 'info';
 
 process.title = 
 
-module.exports = {
-    context: __dirname,
-    performance: {
-        hints: "warning",
-        assetFilter: function(assetFilename) {
-            return !assetFilename.endsWith('vendor.js');
+module.exports = (() => {
+    const webpackConfig = {
+        context: __dirname,
+        performance: {
+            hints: "warning",
+            assetFilter: function(assetFilename) {
+                return !assetFilename.endsWith('vendor.js');
+            },
         },
-    },
-    entry: {
-        main: __dirname + '/app/client/client-app-root.tsx',
-        vendor: ['react', 'react-dom'],
-    },
+        entry: {
+            main: __dirname + '/app/client/client-app-root.tsx',
+            vendor: ['react', 'react-dom'],
+        },
 
-    output: {
-        path: __dirname,
-        filename: 'build/app/client/[name].js',
-    },
+        output: {
+            path: __dirname,
+            filename: 'build/app/client/[name].js',
+        },
 
-    module: {
-        loaders: [
-            {
-                test: /\.tsx?$/,
-                exclude: /node_modules/,
-                use: [
-                    {
-                        loader: 'awesome-typescript-loader',
-                        options: {
-                            useBabel: true,
-                            useCache: true,
-                            cacheDirectory: '.awcache',
-                            configFileName: path.join(__dirname, './app/client/tsconfig.json'),
-                            babelOptions: babelrc,
+        module: {
+            loaders: [
+                {
+                    test: /\.tsx?$/,
+                    exclude: /node_modules/,
+                    use: [
+                        {
+                            loader: 'awesome-typescript-loader',
+                            options: {
+                                useBabel: true,
+                                useCache: true,
+                                cacheDirectory: '.awcache',
+                                configFileName: path.join(__dirname, './app/client/tsconfig.json'),
+                                babelOptions: babelrc,
+                            }
                         }
+                    ],
+                },
+                {
+                    test: /\.((hbs)|(handlebars))$/,
+                    loader: 'handlebars-loader'
+                },
+                {
+                    test: /\.json/,
+                    loaders: 'json-loader'
+                },
+                {
+                    test: /\.jsx?$/,
+                    exclude: /node_modules/,
+                    loader: 'babel-loader',
+                    query: {
+                        presets: ["es2015", "stage-0", "react"]
                     }
-                ],
-            },
-            {
-                test: /\.((hbs)|(handlebars))$/,
-                loader: 'handlebars-loader'
-            },
-            {
-                test: /\.json/,
-                loaders: 'json-loader'
-            },
-            {
-                test: /\.jsx?$/,
-                exclude: /node_modules/,
-                loader: 'babel-loader',
-                query: {
-                    presets: ["es2015", "stage-0", "react"]
-                }
-            },
-        ]
-    },
+                },
+            ]
+        },
 
-    plugins: [
-        new ExtractTextPlugin({
-            filename: '[name].scss',
-            allChunks: true
-        }),
+        plugins: [
+            new ExtractTextPlugin({
+                filename: '[name].scss',
+                allChunks: true
+            }),
 
-        new webpack.DefinePlugin({
-            NODE_ENV:  JSON.stringify(NODE_ENV),
-            LOG_LEVEL: JSON.stringify(LOG_LEVEL),
-            'process.env': {
+            new webpack.DefinePlugin({
                 NODE_ENV:  JSON.stringify(NODE_ENV),
-                LOG_LEVEL: JSON.stringify(LOG_LEVEL)
-            }
-        }),
+                LOG_LEVEL: JSON.stringify(LOG_LEVEL),
+                'process.env': {
+                    NODE_ENV:  JSON.stringify(NODE_ENV),
+                    LOG_LEVEL: JSON.stringify(LOG_LEVEL)
+                }
+            }),
 
-        new HandlebarsPlugin({
-            // path to main hbs template 
-            entry: srcFilePath('index.hbs'),
-            // filepath to result
-            output: buildFilePath((NODE_ENV === 'development')
-                        ? 'app/client/index.html'
-                        : 'app/client/public/index.html'
-            ),
-            // data passed to main hbs template
-            data: configIndexHtml
-        }),
+            new HandlebarsPlugin({
+                // path to main hbs template 
+                entry: srcFilePath('index.hbs'),
+                // filepath to result
+                output: buildFilePath((NODE_ENV === 'development')
+                            ? 'app/client/index.html'
+                            : 'app/client/public/index.html'
+                ),
+                // data passed to main hbs template
+                data: configIndexHtml
+            }),
 
-        new webpack.optimize.CommonsChunkPlugin({
-            names: ['vendor', 'manifest'] // Specify the common bundle's name.
-        }),
+            new webpack.optimize.CommonsChunkPlugin({
+                names: ['vendor', 'manifest'] // Specify the common bundle's name.
+            }),
 
-        new WebpackBuildStatusNotifier()
-    ]
-};
+            new WebpackBuildStatusNotifier()
+        ],
+    };
+
+    return ((process.env.NODE_ENV === 'production')
+        ? webpackConfig
+        : Object.assign({}, webpackConfig, { devtool: 'inline-source-map' }));
+})();

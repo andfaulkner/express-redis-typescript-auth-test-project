@@ -135,4 +135,23 @@ exports.HashGenerationError = (() => {
     HashGenerationError.prototype = Object.create(Error.prototype);
     return HashGenerationError;
 })();
+/**
+ * Use when an attempt to hash a string, Buffer, number, etc. fails.
+ *
+ * @param {string} message        - error message
+ * @param {string} filename       - file the error occurred in
+ */
+exports.LoginFailedError = (() => {
+    function LoginFailedError(message, filename, usernameSought) {
+        Error.captureStackTrace(this);
+        this.message = message;
+        this.name = `LoginFailedError`;
+        this.filename = filename;
+        this.usernameSought = usernameSought;
+        this.username = usernameSought;
+        this.summary = `In ${filename}:: ${this.name}: Failed to authenticate user${(this.usernameSought) ? ': ' + this.usernameSought : ''}  - \n${message}`;
+    }
+    LoginFailedError.prototype = Object.create(Error.prototype);
+    return LoginFailedError;
+})();
 //# sourceMappingURL=error-objects.js.map

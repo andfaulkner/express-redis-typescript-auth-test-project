@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/fa204a87d12d36f7adc4f18349781b9878dcc741/passport-jwt/index.d.ts",
+    "raw": "registry:dt/passport-jwt#2.0.0+20160428045346",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/fa204a87d12d36f7adc4f18349781b9878dcc741/passport-jwt/index.d.ts"
+  }
+}
