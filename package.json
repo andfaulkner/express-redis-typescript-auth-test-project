@@ -107,7 +107,8 @@
     "test:client:watch": "script/npm-cmds/test:client:watch",
     "test:server": "script/npm-cmds/test:server",
     "test:server:watch": "script/npm-cmds/test:server:watch",
-    "test:server:debug": "script/npm-cmds/test:server:debug"
+    "test:server:debug": "script/npm-cmds/test:server:debug",
+    "test:shared:watch": "script/npm-cmds/test:shared:watch"
   },
   "keywords": [],
   "author": "",

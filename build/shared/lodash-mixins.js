@@ -1,7 +1,7 @@
 /// <reference path="../typings/index.d.ts" />
 "use strict";
 const _ = require("lodash");
-const deep_freeze_strict_1 = require("deep-freeze-strict");
+const deepFreeze = require("deep-freeze-strict");
 //******************************************* METHODS *********************************************/
 /**
  * Combine multiple reducers. Each reducer's output is the input of the next
@@ -26,15 +26,14 @@ const flattenObjectOnce = (obj) => {
         return acc;
     }, {});
 };
-/**
- * Return a deep-frozen clone of a group of objects. Completely safe.
- */
-const assignClone = (obj1 = {}, obj2 = {}, obj3 = {}, obj4 = {}, obj5 = {}, obj6 = {}) => {
-    return deep_freeze_strict_1.default(Object.assign({}, obj1, obj2, obj3, obj4, obj5, obj6));
-};
 //******************************************** EXPORT *********************************************/
 const mixins = _.mixin(_, {
-    assignClone,
+    /**
+     * Return a deep-frozen clone of a group of objects. Completely safe.
+     */
+    assignClone: (obj1 = {}, obj2 = {}, obj3 = {}, obj4 = {}, obj5 = {}, obj6 = {}) => {
+        return deepFreeze(Object.assign({}, obj1, obj2, obj3, obj4, obj5, obj6));
+    },
     reduceReducers,
     flattenObjectOnce,
     // pass-through logger
@@ -46,14 +45,14 @@ const mixins = _.mixin(_, {
         return varargs;
     },
     // Sugar for accessing elements at the start and end of a collection
-    secondLast: (coll) => coll[coll.length - 2],
-    thirdLast: (coll) => coll[coll.length - 3],
-    fourthLast: (coll) => coll[coll.length - 4],
-    fifthLast: (coll) => coll[coll.length - 5],
-    second: (coll) => coll[1],
-    third: (coll) => coll[2],
-    fourth: (coll) => coll[3],
-    fifth: (coll) => coll[4],
+    secondLast: (coll) => (coll.length > 1) ? coll[coll.length - 2] : null,
+    thirdLast: (coll) => (coll.length > 2) ? coll[coll.length - 3] : null,
+    fourthLast: (coll) => (coll.length > 3) ? coll[coll.length - 4] : null,
+    fifthLast: (coll) => (coll.length > 4) ? coll[coll.length - 5] : null,
+    second: (coll) => (coll.length > 1) ? coll[1] : null,
+    third: (coll) => (coll.length > 2) ? coll[2] : null,
+    fourth: (coll) => (coll.length > 3) ? coll[3] : null,
+    fifth: (coll) => (coll.length > 4) ? coll[4] : null,
     // True if any element in the 1st collection is the same as any element in the 2nd
     hasOverlap: (coll1, coll2) => _.some(coll1, (item) => _.includes(coll2, item)),
     // Insert item into array (coll) at given index (idx)

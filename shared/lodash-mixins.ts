@@ -1,11 +1,10 @@
 /// <reference path="../typings/index.d.ts" />
 
 import * as _ from 'lodash';
-import deepFreeze from 'deep-freeze-strict';
-
+import * as deepFreeze from 'deep-freeze-strict';
 
 //*************************************** TYPE DEFINITIONS ****************************************/
-type ExtractOneFromColl = ((coll: any[]) => any) | ((coll: string) => string);
+type ExtractOneFromColl = (coll: any[]) => any;
 
 interface lodashExtended extends _.LoDashStatic{
     puts: (...varargs: any[]) => any;
@@ -69,17 +68,16 @@ const flattenObjectOnce = (obj: {}) => {
   }, {});
 };
 
-/**
- * Return a deep-frozen clone of a group of objects. Completely safe.
- */
-const assignClone = (obj1 = {}, obj2 = {}, obj3 = {}, obj4 = {}, obj5 = {}, obj6 = {}) => {
-  return deepFreeze(Object.assign({}, obj1, obj2, obj3, obj4, obj5, obj6));
-};
-
-
 //******************************************** EXPORT *********************************************/
 const mixins = _.mixin(_, {
-    assignClone,
+
+    /**
+     * Return a deep-frozen clone of a group of objects. Completely safe.
+     */
+    assignClone: (obj1 = {}, obj2 = {}, obj3 = {}, obj4 = {}, obj5 = {}, obj6 = {}): {} => {
+        return deepFreeze(Object.assign({}, obj1, obj2, obj3, obj4, obj5, obj6));
+    },
+
     reduceReducers,
     flattenObjectOnce,
 
@@ -93,14 +91,14 @@ const mixins = _.mixin(_, {
     },
 
     // Sugar for accessing elements at the start and end of a collection
-    secondLast: (coll: string | any[]) => coll[coll.length - 2],
-    thirdLast:  (coll: string | any[]) => coll[coll.length - 3],
-    fourthLast: (coll: string | any[]) => coll[coll.length - 4],
-    fifthLast:  (coll: string | any[]) => coll[coll.length - 5],
-    second:     (coll: string | any[]) => coll[1],
-    third:      (coll: string | any[]) => coll[2],
-    fourth:     (coll: string | any[]) => coll[3],
-    fifth:      (coll: string | any[]) => coll[4],
+    secondLast: (coll: string | any[]) => (coll.length > 1) ? coll[coll.length - 2] : null,
+    thirdLast:  (coll: string | any[]) => (coll.length > 2) ? coll[coll.length - 3] : null,
+    fourthLast: (coll: string | any[]) => (coll.length > 3) ? coll[coll.length - 4] : null,
+    fifthLast:  (coll: string | any[]) => (coll.length > 4) ? coll[coll.length - 5] : null,
+    second:     (coll: string | any[]) => (coll.length > 1) ? coll[1] : null,
+    third:      (coll: string | any[]) => (coll.length > 2) ? coll[2] : null,
+    fourth:     (coll: string | any[]) => (coll.length > 3) ? coll[3] : null,
+    fifth:      (coll: string | any[]) => (coll.length > 4) ? coll[4] : null,
 
     // True if any element in the 1st collection is the same as any element in the 2nd
     hasOverlap: (coll1: any[], coll2: any[]) => _.some(coll1, (item) => _.includes(coll2, item)),

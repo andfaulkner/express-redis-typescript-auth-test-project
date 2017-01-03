@@ -7,6 +7,7 @@
 /// <reference path="modules/app-root-path/index.d.ts" />
 /// <reference path="modules/argon2/index.d.ts" />
 /// <reference path="modules/body-parser/index.d.ts" />
+/// <reference path="modules/deep-freeze-strict/index.d.ts" />
 /// <reference path="modules/express/index.d.ts" />
 /// <reference path="modules/helmet/index.d.ts" />
 /// <reference path="modules/jsonwebtoken/index.d.ts" />

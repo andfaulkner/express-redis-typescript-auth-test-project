@@ -20,41 +20,43 @@ const users = [];
 /****************************************** CREATE USER *******************************************/
 class UserMock {
     constructor(opts) {
-        //
-        // TODO hashing here
-        //
-        this.comparePassword = (password) => new Promise((resolve, reject) => {
-            return ((password === this.password)
-                ? resolve(password)
-                : reject(new error_objects_1.LoginFailedError(`${TAG} Incorrect password`, 'user-mock.ts', this.username)));
-        });
-        this.hashGen = (opts) => __awaiter(this, void 0, void 0, function* () {
-            const { hash, salt } = yield hash_credentials_1.generateHash(opts.password);
-            this.id = hash;
-            this.salt = salt;
-        });
+        /**
+         * Perform actual hashing here
+         * @param {string} password - submitted password - will be compared against the hash
+         */
+        this.comparePassword = (password) => new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+            const isMatch = yield hash_credentials_1.verifyPassVsHash(password, this.pHash, true);
+            console.log(`${TAG} comparePassword: isMatch: ${isMatch}`);
+            return (isMatch
+                ? resolve(true)
+                : reject(new error_objects_1.LoginFailedError(`${TAG} Incorrect password`, __filename, this.username)));
+        }));
+        this.save = () => {
+            console.log('MOCK - user saved to database!');
+            console.log(`username: ${this.username}`);
+            console.log(`pHash: ${this.pHash}`);
+        };
         this.username = opts.username;
-        this.password = opts.password;
-        this.hashGen(opts);
-        users.push(this);
+        (() => __awaiter(this, void 0, void 0, function* () {
+            const { hash, salt } = yield hash_credentials_1.generateHash(opts.password);
+            this.pHash = hash;
+            this.salt = salt;
+            users.push(this);
+        }))();
     }
     // TODO remove this. it's insecure. Use only findById in future.
-    static findOne(params) {
+    static findOne(args) {
         return new Promise((resolve, reject) => {
-            console.log(`${TAG} UserMock.findOne:: params: `, params, `\n${TAG} users: (below)\n`, users);
-            const user = lodash_mixins_1._.find(users, (user) => (user.username === params.username) &&
-                (!params.id || (user.id === params.id)));
-            if (user && user.username && user.password && lodash_mixins_1._.isString(user.username)) {
+            console.log(`${TAG} UserMock.findOne:: args: `, args, `\n${TAG} users: (below)\n`, users);
+            const user = lodash_mixins_1._.find(users, (user) => (user.username === args.username) &&
+                (!args.pHash || (user.pHash === args.pHash)));
+            if (user && user.username && lodash_mixins_1._.isString(user.username)) {
                 console.log(`${TAG} UserMock.findOne:: found user ${user.username}`);
                 return resolve(user);
             }
             console.log(`${TAG} UserMock.findOne:: Failed to find user. Rejecting...`);
-            return reject(new error_objects_1.LoginFailedError(`${TAG} UsersMock.Users array doesn't contain user`, 'user-mock.ts', params.username || ''));
+            return reject(new error_objects_1.LoginFailedError(`${TAG} UsersMock.Users array doesn't contain user`, 'user-mock.ts', args.username || ''));
         });
-    }
-    static findById(id, next) {
-        const user = lodash_mixins_1._.find(users, (user) => user.id === id);
-        return next(null, user);
     }
 }
 exports.UserMock = UserMock;

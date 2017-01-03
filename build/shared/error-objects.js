@@ -149,7 +149,7 @@ exports.LoginFailedError = (() => {
         this.filename = filename;
         this.usernameSought = usernameSought;
         this.username = usernameSought;
-        this.summary = `In ${filename}:: ${this.name}: Failed to authenticate user${(this.usernameSought) ? ': ' + this.usernameSought : ''}  - \n${message}`;
+        this.summary = `[ERROR] In ${filename}:: ${this.name}: Failed to authenticate user${(this.usernameSought) ? ': ' + this.usernameSought : ''} - ${message}`;
     }
     LoginFailedError.prototype = Object.create(Error.prototype);
     return LoginFailedError;

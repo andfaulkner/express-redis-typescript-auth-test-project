@@ -13,6 +13,8 @@ const bodyParser = require("body-parser");
 // IMPORT FLASHES ON SESSINO LOGIN SUCCESS
 const connectFlash = require('connect-flash');
 const util_1 = require("util");
+const jwt = require("jsonwebtoken");
+console.log(jwt);
 //*************************************** PROJECT MODULES *****************************************/
 const error_objects_1 = require("../../../shared/error-objects");
 const hash_credentials_1 = require("../services/hash-credentials");
@@ -22,6 +24,8 @@ const authentication_1 = require("../services/authentication");
 const mad_logs_1 = require("mad-logs");
 const colors = require("colors");
 const TAG = mad_logs_1.buildFileTag('auth-route.ts', colors.bgMagenta.white);
+/********************************************* CONFIG *********************************************/
+const config_1 = require("../../../config/config");
 const secret = new Buffer('__TEMPORARY_SHARED_SECRET__OOO_CATCATCATTIME__*($ngg89tgby78g345yhrh9089g45th88t__', 'base64');
 //******************************************* LOGGING *********************************************/
 util_1.inspect.defaultOptions = {
@@ -37,14 +41,13 @@ exports.authRouter = app;
 app
     .use(bodyParser.json())
     .use(bodyParser.urlencoded({ extended: false }));
-/******************************************* USER MOCKS *******************************************/
-const userMock = {
-    username: 'test',
-    password: '123',
-    admin: false
-};
-const userMockTokenData = (() => __awaiter(this, void 0, void 0, function* () { return yield hash_credentials_1.buildJwt(userMock); }))();
 //******************************************* HELPERS *********************************************/
+const handleAuthFail = (res, username) => {
+    const loginFailed = new error_objects_1.LoginFailedError(`Password does not match username`, `auth-route.ts`, username);
+    console.error(loginFailed.summary);
+    return res.json(loginFailed);
+};
+/**************************************** ROUTE FUNCTIONS *****************************************/
 const handleLoginReq = (req, res) => __awaiter(this, void 0, void 0, function* () {
     // console.log(inspect(req, false, 10, true));
     // console.log(inspect(req.body, false, 10, true));
@@ -56,18 +59,21 @@ const handleLoginReq = (req, res) => __awaiter(this, void 0, void 0, function* (
     try {
         const user = yield user_mock_1.UserMock.findOne({ username });
         console.log(`${TAG} handleLoginReq: found user:`, user);
-        const isMatch = yield hash_credentials_1.verifyPassVsHash(password, user.id, true);
+        const isMatch = yield hash_credentials_1.verifyPassVsHash(password, user.pHash, true);
         console.log(`${TAG} handleLoginReq: isMatch?:`, isMatch);
         if (!isMatch) {
-            const loginFailed = new error_objects_1.LoginFailedError(`Password does not match username`, `auth-route.ts`, username);
-            console.error(loginFailed);
-            return res.json(loginFailed);
+            return handleAuthFail(res, username);
         }
-        return res.json({ success: 'win! User exists!', username });
+        var token = jwt.sign(user, config_1.config.auth.token.secret, {
+            expiresIn: 1440,
+        });
+        return res.status(200).json({ success: true, message: 'win! User exists! Enjoy your token!', username, token });
     }
     catch (e) {
+        e.message = (e.message ? (e.message + '\n') : '') + `${TAG} handleLoginReq : login failed.`;
         console.error(`${TAG} handleLoginReq: Error: `, e.summary ? e.summary : e);
-        res.redirect('/');
+        console.log('Login failed');
+        return res.redirect('/');
     }
     // req.flash('info', 'Hi there!')
     // const newToken = await buildJwt(userData);

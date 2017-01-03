@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 
-FILES_TO_WATCH='./build/app/server/** ./build/config/** ./build/shared/**'
+FILES_TO_WATCH='./build/shared/** ./typings/**'
 
-MOCHA_RUN_CMD="mocha build/app/server/**.spec.js build/app/server/**/*.spec.js"
+MOCHA_RUN_CMD="mocha build/shared/**.spec.js build/shared/**/*.spec.js"
 REBUILD_SERVER_ON_CHANGE="npm run build:server:watch"
 
 ############################################## SCRIPT ##############################################

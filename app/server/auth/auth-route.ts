@@ -6,7 +6,10 @@ import * as bodyParser from 'body-parser';
 const connectFlash = require('connect-flash');
 
 import { inspect } from 'util';
-import * as _ from 'lodash';
+import { _ } from '../../../shared/lodash-mixins';
+import * as jwt from 'jsonwebtoken';
+
+console.log(jwt);
 
 //*************************************** PROJECT MODULES *****************************************/
 import { LoginFailedError } from '../../../shared/error-objects';
@@ -61,17 +64,17 @@ app
    .use(bodyParser.json())
    .use(bodyParser.urlencoded({ extended: false }));
 
-/******************************************* USER MOCKS *******************************************/
-const userMock: UserProps = {
-    username: 'test',
-    password: '123', 
-    admin: false
-};
-type TokenData = { token: string, salt: string };
-const userMockTokenData = (async (): Promise<TokenData> => await buildJwt(userMock))();
-
-
 //******************************************* HELPERS *********************************************/
+const handleAuthFail = (res:  express.Response, username: string) => {
+    const loginFailed = new LoginFailedError(
+        `Password does not match username`, `auth-route.ts`, username
+    );
+    console.error(loginFailed.summary);
+    return res.json(loginFailed);
+};
+
+
+/**************************************** ROUTE FUNCTIONS *****************************************/
 const handleLoginReq = async (req: expressRequestExtended<UserProps>, res: express.Response) => {
     // console.log(inspect(req, false, 10, true));
     // console.log(inspect(req.body, false, 10, true));
@@ -87,31 +90,32 @@ const handleLoginReq = async (req: expressRequestExtended<UserProps>, res: expre
         const user = await UserMock.findOne({ username });
         console.log(`${TAG} handleLoginReq: found user:`, user);
 
-        const isMatch = await verifyPassVsHash(password, user.id, true);
+        const isMatch = await verifyPassVsHash(password, user.pHash, true);
         console.log(`${TAG} handleLoginReq: isMatch?:`, isMatch);
 
         if (!isMatch) {
-            const loginFailed = new LoginFailedError(
-                `Password does not match username`, `auth-route.ts`, username);
-            console.error(loginFailed);
-            return res.json(loginFailed);
+            return handleAuthFail(res, username);
         }
 
-        return res.json({ success: 'win! User exists!', username });
+        var token = jwt.sign(user, config.auth.token.secret, {
+            expiresIn: 1440,
+        });
+
+        return res.status(200).json({ success: true, message: 'win! User exists! Enjoy your token!', username, token });
 
     } catch(e) {
+        e.message = (e.message ? (e.message + '\n') : '') + `${TAG} handleLoginReq : login failed.`;
+
         console.error(`${TAG} handleLoginReq: Error: `, e.summary ? e.summary : e);
-        res.redirect('/');
+        console.log('Login failed');
+        return res.redirect('/');
     }
 
     // req.flash('info', 'Hi there!')
-
     // const newToken = await buildJwt(userData);
     // console.log(newToken);
-
     // const storedToken = await userMockTokenData;
     // console.log('\n\nstoredToken'); console.log(storedToken);
-
     // if (newToken.token === storedToken.token) {
     //     console.log('logged in successfully');
     //     res.json({ loginSuccessful: 'true', token: 'TODO' });

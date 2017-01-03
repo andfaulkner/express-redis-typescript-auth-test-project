@@ -21,6 +21,7 @@
     ],
     "include": [
         "../../config/**/*.ts",
+        "../../shared/**/*.ts",
         "./**/*.ts",
         "../../typings/index.d.ts"
     ]
