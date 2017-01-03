@@ -7,7 +7,6 @@ FILES_TO_WATCH='./build/app/client/**.js ./build/config/**.js ./build/shared/**.
 #   npm run test:client
 #
 env NODE_PATH=./ npm run build:client;
-
 tsc -p $PWD/app/client/tsconfig.json
 
 mocha build/app/client/**.spec.js

@@ -7,7 +7,7 @@ const HandlebarsPlugin = require('handlebars-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const configIndexHtml = require('./config/index-html-config');
 
-const WebpackBuildStatusNotifier = require('./config/webpack/werbpack-complete-notifier-plugin');
+const WebpackBuildStatusNotifier = require('./config/webpack/webpack-complete-notifier-plugin');
 
 // const { config } = require('config/config');
 

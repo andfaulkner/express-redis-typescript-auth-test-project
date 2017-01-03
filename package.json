@@ -54,6 +54,7 @@
     "babel-preset-stage-0": "^6.16.0",
     "chai": "^3.5.0",
     "chai-enzyme": "^0.6.1",
+    "child-process-promise": "^2.2.0",
     "chokidar": "^1.6.1",
     "colors": "^1.1.2",
     "commander": "^2.9.0",
@@ -79,6 +80,7 @@
     "pm2": "^2.2.3",
     "raw-loader": "^0.5.1",
     "react-addons-test-utils": "^15.4.1",
+    "rimraf-promise": "^2.0.0",
     "sass": "^0.5.0",
     "sass-loader": "^4.1.1",
     "sinon": "^1.17.6",
@@ -108,7 +110,8 @@
     "test:server": "script/npm-cmds/test:server",
     "test:server:watch": "script/npm-cmds/test:server:watch",
     "test:server:debug": "script/npm-cmds/test:server:debug",
-    "test:shared:watch": "script/npm-cmds/test:shared:watch"
+    "test:shared:watch": "script/npm-cmds/test:shared:watch",
+    "util": "script/util-cli.sh"
   },
   "keywords": [],
   "author": "",

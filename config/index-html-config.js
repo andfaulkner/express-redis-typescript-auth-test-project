@@ -1,5 +1,5 @@
 module.exports = {
-    appScript: 'client-app.js',
+    appScript: 'main.js',
     appVendorScript: 'vendor.js',
     appManifestScript: 'manifest.js',
 };
