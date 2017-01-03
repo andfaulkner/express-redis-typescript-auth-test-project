@@ -21,10 +21,10 @@ import * as _ from 'lodash';
 import { Express } from 'express';
 
 /************************************ IMPORT FILE TO BE TESTED ************************************/
-import { launchServer } from './server-process';
+import { launchServer } from '../server-process';
 
 /******************************************** HELPERS *********************************************/
-import { StubConsole, blockErrorOutput } from '../../test/helpers/stub-console';
+import { StubConsole, blockErrorOutput } from '../../../test/helpers/stub-console';
 
 const scriptTagRegex = /<script src=['"][a-zA-Z0-9\.-]+['"]>/;
 

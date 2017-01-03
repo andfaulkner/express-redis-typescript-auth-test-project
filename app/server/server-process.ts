@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as http from 'http';
 
 //Determine and store project root path
-import { rootPath } from './get-root-path';
+import { rootPath } from 'get-root-path'
 
 /************************************** THIRD-PARTY MODULES ***************************************/
 import * as express from 'express';
@@ -16,7 +16,7 @@ import { buildFileTag } from 'mad-logs';
 const TAG = buildFileTag('[server-process.ts]', colors.white.bgBlack);
 
 // routes
-import { authRouter } from './auth/auth-route';
+import { authRouter } from './routes/auth-routes';
 
 // middlewares
 import { requestLogFactory } from './middlewares/middlewares';
@@ -56,9 +56,10 @@ export const launchServer = (next) => {
 
         //Build Express app itself (loads & runs a constructor module), serve over web
         .listen(config.port.server, function startServer() {
-            console.log('Server running: http://127.0.0.1:' + config.port.server + '/');
-            console.log('Server process id (pid): ' + process.pid); //emit process ID
-            return console.log('Wow. So server. Very running. Much bootup success. Such win.');
+            console.log(`${TAG} Server running: http://127.0.0.1:` + config.port.server + '/');
+            console.log(`${TAG} Server process id (pid): ` + process.pid); //emit process ID
+            console.log(`${TAG} Wow. So server. Very running. Much bootup success. Such win.`);
+            return;
         });
 
     return next(app);

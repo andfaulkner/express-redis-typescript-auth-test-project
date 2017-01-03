@@ -47,7 +47,7 @@ const jwtOptions = {
  * Searches all users for the given username, then returns all user data
  */
 const jwtLogin = new JwtStrategy(jwtOptions, async function(payload, done) {
-    console.log('auth-route: jwtStrategy:: payload:: ', inspect(payload, true, 10, true));
+    console.log(`${TAG} jwtLogin:: payload:: `, inspect(payload, true, 10, true));
 
     try {
         const user = UserModel.findOne({ username: payload.username });
@@ -56,13 +56,6 @@ const jwtLogin = new JwtStrategy(jwtOptions, async function(payload, done) {
         console.error(`${TAG}: jwtLogin: Error: `, e.summary);
         return done(e);
     }
-
-    // TODO set finding username by id up
-    // UserModel.findById(payload._id, function(err: Error | null, user: UserModel) {
-    //     if (err) { return done(err, false); }
-    //     if (user) { return done(null, user); }
-    //     return done(null, false);
-    // });
 });
 
 /*********************************** GLUE STRATEGY TO PASSPORT ************************************/

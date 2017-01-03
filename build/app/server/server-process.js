@@ -3,7 +3,7 @@
 const path = require("path");
 const http = require("http");
 //Determine and store project root path
-const get_root_path_1 = require("./get-root-path");
+const get_root_path_1 = require("get-root-path");
 /************************************** THIRD-PARTY MODULES ***************************************/
 const express = require("express");
 const helmet = require("helmet");
@@ -12,7 +12,7 @@ const mad_logs_1 = require("mad-logs");
 /**************************************** PROJECT MODULES *****************************************/
 const TAG = mad_logs_1.buildFileTag('[server-process.ts]', colors.white.bgBlack);
 // routes
-const auth_route_1 = require("./auth/auth-route");
+const auth_routes_1 = require("./routes/auth-routes");
 // middlewares
 const middlewares_1 = require("./middlewares/middlewares");
 //******************************************** CONFIG *********************************************/
@@ -37,12 +37,13 @@ exports.launchServer = (next) => {
     const app = express()
         .use(middlewares_1.requestLogFactory())
         .use(helmet())
-        .use('/auth', auth_route_1.authRouter)
+        .use('/auth', auth_routes_1.authRouter)
         .use('/', express.static(path.join(get_root_path_1.rootPath, 'build/app/client')))
         .listen(config_1.config.port.server, function startServer() {
-        console.log('Server running: http://127.0.0.1:' + config_1.config.port.server + '/');
-        console.log('Server process id (pid): ' + process.pid); //emit process ID
-        return console.log('Wow. So server. Very running. Much bootup success. Such win.');
+        console.log(`${TAG} Server running: http://127.0.0.1:` + config_1.config.port.server + '/');
+        console.log(`${TAG} Server process id (pid): ` + process.pid); //emit process ID
+        console.log(`${TAG} Wow. So server. Very running. Much bootup success. Such win.`);
+        return;
     });
     return next(app);
 };

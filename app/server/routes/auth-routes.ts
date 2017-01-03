@@ -9,43 +9,21 @@ import { inspect } from 'util';
 import { _ } from '../../../shared/lodash-mixins';
 import * as jwt from 'jsonwebtoken';
 
-console.log(jwt);
-
 //*************************************** PROJECT MODULES *****************************************/
-import { LoginError, ILoginError } from '../../../shared/error-objects';
+import { LoginError } from '../../../shared/error-objects';
 import { buildJwt, verifyPassVsHash } from '../services/hash-credentials';
 import { UserModel } from '../models/user-model';
 import { generateToken, setUserInfo, passportWJwtAndLocal } from '../services/authentication';
 
+import { expressRequestExtended } from '../express-typedef';
+import { config } from '../../../config/config';
+import { verifyAuthToken } from '../middlewares/middlewares';
+
 /******************************************** LOGGING *********************************************/
 import { buildFileTag } from 'mad-logs';
 import * as colors from 'colors';
-const TAG = buildFileTag('auth-route.ts', colors.bgMagenta.white);
+const TAG = buildFileTag('auth-routes.ts', colors.bgMagenta.white);
 
-/********************************************* CONFIG *********************************************/
-import { config } from '../../../config/config';
-
-const secret = new Buffer(
-    '__TEMPORARY_SHARED_SECRET__OOO_CATCATCATTIME__*($ngg89tgby78g345yhrh9089g45th88t__',
-    'base64'
-);
-
-//*************************************** TYPE DEFINITIONS ****************************************/
-interface expressRequestExtended<T> extends express.Request {
-    body: T;
-    user: {
-        username: string;
-        password: string;
-    },
-    flash(message: string): any;
-    flash(event: string, message: string): any;
-}
-
-interface UserProps {
-  username: string;
-  password: string;
-  admin?: boolean | string;
-}
 
 //******************************************* LOGGING *********************************************/
 (inspect as any).defaultOptions = {
@@ -67,7 +45,7 @@ app
 //******************************************* HELPERS *********************************************/
 const handlePasswordMismatch = (res: express.Response, username: string) => {
     const loginFailed = new LoginError(
-        `Password does not match username`, `auth-route.ts`, username
+        `Password does not match username`, `auth-routes.ts`, username
     );
     console.error(loginFailed.summary);
     return res.json(loginFailed);
@@ -89,21 +67,22 @@ const handleAuthSuccess = (res: express.Response, user: UserModel) => {
     });
 };
 
-const handleAuthFail = (e: ILoginError, res: express.Response) => {
+const handleAuthFail = (e: LoginError, res: express.Response) => {
     e.message = (e.message ? (e.message + '\n') : '') + `${TAG} handleLoginReq : login failed.`;
     console.error(`${TAG} handleLoginReq: Error: `, e.summary ? e.summary : e);
-    console.log('Login failed');
-
+    console.error('Login failed');
     return res.redirect('/');
 }
 
 
 /**************************************** ROUTE FUNCTIONS *****************************************/
-const handleLoginReq = async (req: expressRequestExtended<UserProps>, res: express.Response) => {
-    // res.status(200).json({ token: 'JWT ' + generateToken(userInfo), user: setUserInfo(req.user) });
-
-    const { username, password, admin } = req.body;
+/**
+ * Handles POST to /auth/login
+ */
+const handleLoginReq = async (req: expressRequestExtended, res: express.Response): Promise<{}> => {
     console.log(`${TAG} handleLoginReq: req.body:`, inspect(req.body));
+    const { username, password, admin } = req.body;
+    // res.status(200).json({ token: 'JWT ' + generateToken(userInfo), user: setUserInfo(req.user) });
 
     try {
         const user = await UserModel.findOne({ username });
@@ -116,25 +95,33 @@ const handleLoginReq = async (req: expressRequestExtended<UserProps>, res: expre
         return handleAuthSuccess(res, user);
 
     } catch(e) {
-        return handleAuthFail(e, res);
+        handleAuthFail(e, res);
     }
 };
 
-const authedTest = (req: expressRequestExtended<{}>, res: express.Response): void => {
+/**
+ * Test route to ensure auth is working
+ */
+const authedTest = (req: expressRequestExtended, res: express.Response): void => {
     console.log('USER IS AUTHENTICATED!');
     res.json({ result: 'you are authenticated!', 'huh?': 'just letting you know :)' });
 };
 
+const loginRoute = (req: expressRequestExtended, res: express.Response): void => {
+    res.json({ ping: 'pong', msg: 'POST to this route to log in.' });
+};
+
+
 //******************************************** ROUTES *********************************************/
 app
-    .get('/login', (req: expressRequestExtended<{}>, res: express.Response): void => {
-        res.json({ ping: 'pong', msg: 'please POST to this route only' });
-    })
+    .get('/login', loginRoute)
+    .post('/login', handleLoginReq);
 
-    .post('/login', handleLoginReq)
-
-    .post('/must_be_authed',
-          passportWJwtAndLocal.authenticate('jwt', { session: false }),
+app
+    .use(verifyAuthToken)
+    .get('/must_be_authed',
+          // verifyAuthToken,
+          // passportWJwtAndLocal.authenticate('jwt', { session: false }),
           authedTest
     );
 

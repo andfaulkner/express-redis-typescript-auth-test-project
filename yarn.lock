@@ -1718,10 +1718,6 @@ crypto-js@^3.1.9-1:
   version "3.1.9-1"
   resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.1.9-1.tgz#fda19e761fc077e01ffbfdc6e9fdfc59e8806cd8"
 
-crypto@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/crypto/-/crypto-0.0.3.tgz#470a81b86be4c5ee17acc8207a1f5315ae20dbb0"
-
 css-color-names@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/css-color-names/-/css-color-names-0.0.4.tgz#808adc2e79cf84738069b646cb20ec27beb629e0"
@@ -2800,6 +2796,13 @@ get-object@^0.2.0:
   dependencies:
     is-number "^2.0.2"
     isobject "^0.2.0"
+
+get-root-path@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/get-root-path/-/get-root-path-1.0.0.tgz#f1e0ada2640cc9f64c5dd9eb1cf61a01e6923495"
+  dependencies:
+    bluebird "^3.4.7"
+    mad-logs "^3.1.1"
 
 get-value@^2.0.5, get-value@^2.0.6:
   version "2.0.6"

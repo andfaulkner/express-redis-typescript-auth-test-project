@@ -136,6 +136,21 @@ exports.HashGenerationError = (() => {
     return HashGenerationError;
 })();
 /**
+ * Use when unable to resolve a path or find a file / directory
+ */
+class PathfinderError extends Error {
+    constructor(message, pathSeekerFile, pathSought) {
+        super(message);
+        this.message = message;
+        this.pathSeekerFile = pathSeekerFile;
+        this.pathSought = pathSought;
+        this.message = `${pathSeekerFile} could not find ${pathSought}` +
+            (message ? '. message' : '');
+        this.name = 'PathError';
+    }
+}
+exports.PathfinderError = PathfinderError;
+/**
  * Use when an attempt to hash a string, Buffer, number, etc. fails.
  *
  * @param {string} message        - error message
@@ -149,10 +164,9 @@ class LoginError extends Error {
         this.username = username;
         this.name = 'LoginError';
         Error.captureStackTrace(this);
-        this.summary = `[ERROR] In ${fileName}:: LoginError: Failed to authenticate user${(username) ? ': ' + username : ''}  --  ${message}`;
+        this.summary = `[ERROR] In ${fileName}:: LoginError: Failed to authenticate user: ` +
+            `${(username) ? ': ' + username : ''}  --  ${message}`;
     }
 }
 exports.LoginError = LoginError;
-const er = new LoginError('boo', 'error-objects.ts', 'me');
-console.log(er);
 //# sourceMappingURL=error-objects.js.map

@@ -89,11 +89,12 @@ const authedTest = (req, res) => {
     console.log('USER IS AUTHENTICATED!');
     res.json({ result: 'you are authenticated!', 'huh?': 'just letting you know :)' });
 };
+const loginRoute = (req, res) => {
+    res.json({ ping: 'pong', msg: 'POST to this route to log in.' });
+};
 //******************************************** ROUTES *********************************************/
 app
-    .get('/login', (req, res) => {
-    res.json({ ping: 'pong', msg: 'please POST to this route only' });
-})
+    .get('/login', loginRoute)
     .post('/login', handleLoginReq)
     .post('/must_be_authed', authentication_1.passportWJwtAndLocal.authenticate('jwt', { session: false }), authedTest);
-//# sourceMappingURL=auth-routes.js.map
+//# sourceMappingURL=auth-route.js.map

@@ -18,14 +18,12 @@ const jwt = require("jsonwebtoken");
 const error_objects_1 = require("../../../shared/error-objects");
 const hash_credentials_1 = require("../services/hash-credentials");
 const user_model_1 = require("../models/user-model");
-const authentication_1 = require("../services/authentication");
+const config_1 = require("../../../config/config");
+const middlewares_1 = require("../middlewares/middlewares");
 /******************************************** LOGGING *********************************************/
 const mad_logs_1 = require("mad-logs");
 const colors = require("colors");
 const TAG = mad_logs_1.buildFileTag('auth-routes.ts', colors.bgMagenta.white);
-/********************************************* CONFIG *********************************************/
-const config_1 = require("../../../config/config");
-const secret = new Buffer('__TEMPORARY_SHARED_SECRET__OOO_CATCATCATTIME__*($ngg89tgby78g345yhrh9089g45th88t__', 'base64');
 //******************************************* LOGGING *********************************************/
 util_1.inspect.defaultOptions = {
     showProxy: true,
@@ -68,6 +66,9 @@ const handleAuthFail = (e, res) => {
     return res.redirect('/');
 };
 /**************************************** ROUTE FUNCTIONS *****************************************/
+/**
+ * Handles POST to /auth/login
+ */
 const handleLoginReq = (req, res) => __awaiter(this, void 0, void 0, function* () {
     console.log(`${TAG} handleLoginReq: req.body:`, util_1.inspect(req.body));
     const { username, password, admin } = req.body;
@@ -85,15 +86,24 @@ const handleLoginReq = (req, res) => __awaiter(this, void 0, void 0, function* (
         handleAuthFail(e, res);
     }
 });
+/**
+ * Test route to ensure auth is working
+ */
 const authedTest = (req, res) => {
     console.log('USER IS AUTHENTICATED!');
     res.json({ result: 'you are authenticated!', 'huh?': 'just letting you know :)' });
 };
+const loginRoute = (req, res) => {
+    res.json({ ping: 'pong', msg: 'POST to this route to log in.' });
+};
 //******************************************** ROUTES *********************************************/
 app
-    .get('/login', (req, res) => {
-    res.json({ ping: 'pong', msg: 'please POST to this route only' });
-})
-    .post('/login', handleLoginReq)
-    .post('/must_be_authed', authentication_1.passportWJwtAndLocal.authenticate('jwt', { session: false }), authedTest);
+    .get('/login', loginRoute)
+    .post('/login', handleLoginReq);
+app
+    .use(middlewares_1.verifyAuthToken)
+    .get('/must_be_authed', 
+// verifyAuthToken,
+// passportWJwtAndLocal.authenticate('jwt', { session: false }),
+authedTest);
 //# sourceMappingURL=auth-routes.js.map

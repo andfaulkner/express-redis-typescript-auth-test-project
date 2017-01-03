@@ -52,7 +52,7 @@ const jwtOptions = {
  */
 const jwtLogin = new passport_jwt_1.Strategy(jwtOptions, function (payload, done) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('auth-route: jwtStrategy:: payload:: ', util_1.inspect(payload, true, 10, true));
+        console.log(`${TAG} jwtLogin:: payload:: `, util_1.inspect(payload, true, 10, true));
         try {
             const user = user_model_1.UserModel.findOne({ username: payload.username });
             return done(null, user);
@@ -61,12 +61,6 @@ const jwtLogin = new passport_jwt_1.Strategy(jwtOptions, function (payload, done
             console.error(`${TAG}: jwtLogin: Error: `, e.summary);
             return done(e);
         }
-        // TODO set finding username by id up
-        // UserModel.findById(payload._id, function(err: Error | null, user: UserModel) {
-        //     if (err) { return done(err, false); }
-        //     if (user) { return done(null, user); }
-        //     return done(null, false);
-        // });
     });
 });
 /*********************************** GLUE STRATEGY TO PASSPORT ************************************/

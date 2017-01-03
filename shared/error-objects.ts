@@ -157,13 +157,20 @@ export const HashGenerationError = (() => {
     return HashGenerationError;
 })();
 
-export interface ILoginError {
-    (message: string, fileName: string, username?: string): void;
-    summary: string;
-    username: string;
-    fileName: string;
-    name: 'LoginError';
-    message: string;
+/**
+ * Use when unable to resolve a path or find a file / directory
+ */
+export class PathfinderError extends Error {
+    constructor(
+        public message: string,
+        public pathSeekerFile: string,
+        public pathSought: string
+    ) {
+        super(message);
+        this.message = `${pathSeekerFile} could not find ${pathSought}` +
+                       (message ? '. message' : '');
+        this.name = 'PathError';
+    }
 }
 
 /**
@@ -179,10 +186,7 @@ export class LoginError extends Error {
     constructor(public message: string, public fileName: string, public username: string = '') {
         super();
         Error.captureStackTrace(this);
-        this.summary = `[ERROR] In ${fileName}:: LoginError: Failed to authenticate user${
-                       (username) ? ': ' + username : ''}  --  ${message}`;
+        this.summary = `[ERROR] In ${fileName}:: LoginError: Failed to authenticate user: ` +
+                       `${(username) ? ': ' + username : ''}  --  ${message}`;
     }
 }
-
-const er = new LoginError('boo', 'error-objects.ts', 'me');
-console.log(er);

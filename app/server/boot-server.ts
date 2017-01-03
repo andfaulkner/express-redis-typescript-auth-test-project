@@ -19,7 +19,7 @@ import * as __REGISTER_CLEANUP_ON_DEATH__ from '../../shared/process-cleanup';
 __REGISTER_CLEANUP_ON_DEATH__(TAG);
 
 /***************************************** GET ROOT PATH ******************************************/
-import { rootPath } from './get-root-path';
+import { rootPath } from 'get-root-path'
 
 //********************************* LAUNCH ACTUAL SERVER PROCESS **********************************/
 console.log(`\n${TAG} ****** Launching Express static asset & REST API server... ******\n`);

@@ -13,7 +13,7 @@ const TAG = mad_logs_1.buildFileTag('[express]', colors.white);
 const __REGISTER_CLEANUP_ON_DEATH__ = require("../../shared/process-cleanup");
 __REGISTER_CLEANUP_ON_DEATH__(TAG);
 /***************************************** GET ROOT PATH ******************************************/
-const get_root_path_1 = require("./get-root-path");
+const get_root_path_1 = require("get-root-path");
 //********************************* LAUNCH ACTUAL SERVER PROCESS **********************************/
 console.log(`\n${TAG} ****** Launching Express static asset & REST API server... ******\n`);
 if (process.env.NODE_ENV === 'development') {
