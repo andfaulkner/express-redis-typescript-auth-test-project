@@ -12,9 +12,9 @@ import * as jwt from 'jsonwebtoken';
 console.log(jwt);
 
 //*************************************** PROJECT MODULES *****************************************/
-import { LoginFailedError } from '../../../shared/error-objects';
+import { LoginError, ILoginError } from '../../../shared/error-objects';
 import { buildJwt, verifyPassVsHash } from '../services/hash-credentials';
-import { UserMock } from '../models/user-mock';
+import { UserModel } from '../models/user-model';
 import { generateToken, setUserInfo, passportWJwtAndLocal } from '../services/authentication';
 
 /******************************************** LOGGING *********************************************/
@@ -65,64 +65,59 @@ app
    .use(bodyParser.urlencoded({ extended: false }));
 
 //******************************************* HELPERS *********************************************/
-const handleAuthFail = (res:  express.Response, username: string) => {
-    const loginFailed = new LoginFailedError(
+const handlePasswordMismatch = (res: express.Response, username: string) => {
+    const loginFailed = new LoginError(
         `Password does not match username`, `auth-route.ts`, username
     );
     console.error(loginFailed.summary);
     return res.json(loginFailed);
 };
 
+/**
+ * Handler for successful authentication. Send a token to the user along with a success message.
+ * @param res - express response
+ * @param user - the user model object
+ */
+const handleAuthSuccess = (res: express.Response, user: UserModel) => {
+    console.log(`${TAG} handleAuthSuccess:: Auth succeeded for user: ${user.username}`);
+    const token = jwt.sign(user, config.auth.token.secret, { expiresIn: config.auth.expiry });
+    return res.status(200).json({
+        success: true,
+        message: 'win! User exists! Enjoy your token!',
+        username: user.username,
+        token
+    });
+};
+
+const handleAuthFail = (e: ILoginError, res: express.Response) => {
+    e.message = (e.message ? (e.message + '\n') : '') + `${TAG} handleLoginReq : login failed.`;
+    console.error(`${TAG} handleLoginReq: Error: `, e.summary ? e.summary : e);
+    console.log('Login failed');
+
+    return res.redirect('/');
+}
+
 
 /**************************************** ROUTE FUNCTIONS *****************************************/
 const handleLoginReq = async (req: expressRequestExtended<UserProps>, res: express.Response) => {
-    // console.log(inspect(req, false, 10, true));
-    // console.log(inspect(req.body, false, 10, true));
-    // let userInfo = setUserInfo(req.user);
-
-    // res.status(200).json({ token: 'JWT ' + generateToken(userInfo), user: userInfo });
+    // res.status(200).json({ token: 'JWT ' + generateToken(userInfo), user: setUserInfo(req.user) });
 
     const { username, password, admin } = req.body;
     console.log(`${TAG} handleLoginReq: req.body:`, inspect(req.body));
-    console.log(`${TAG} handleLoginReq: username:`, username, `\n${TAG} password:`, password);
 
     try {
-        const user = await UserMock.findOne({ username });
+        const user = await UserModel.findOne({ username });
         console.log(`${TAG} handleLoginReq: found user:`, user);
 
         const isMatch = await verifyPassVsHash(password, user.pHash, true);
         console.log(`${TAG} handleLoginReq: isMatch?:`, isMatch);
 
-        if (!isMatch) {
-            return handleAuthFail(res, username);
-        }
-
-        var token = jwt.sign(user, config.auth.token.secret, {
-            expiresIn: 1440,
-        });
-
-        return res.status(200).json({ success: true, message: 'win! User exists! Enjoy your token!', username, token });
+        if (!isMatch) return handlePasswordMismatch(res, username);
+        return handleAuthSuccess(res, user);
 
     } catch(e) {
-        e.message = (e.message ? (e.message + '\n') : '') + `${TAG} handleLoginReq : login failed.`;
-
-        console.error(`${TAG} handleLoginReq: Error: `, e.summary ? e.summary : e);
-        console.log('Login failed');
-        return res.redirect('/');
+        return handleAuthFail(e, res);
     }
-
-    // req.flash('info', 'Hi there!')
-    // const newToken = await buildJwt(userData);
-    // console.log(newToken);
-    // const storedToken = await userMockTokenData;
-    // console.log('\n\nstoredToken'); console.log(storedToken);
-    // if (newToken.token === storedToken.token) {
-    //     console.log('logged in successfully');
-    //     res.json({ loginSuccessful: 'true', token: 'TODO' });
-    // } else {
-    //     console.log('failed to log in');
-    //     res.redirect('/');
-    // }
 };
 
 const authedTest = (req: expressRequestExtended<{}>, res: express.Response): void => {

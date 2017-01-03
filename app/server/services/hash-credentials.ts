@@ -18,8 +18,6 @@ import { buildFileTag } from 'mad-logs';
 import * as colors from 'colors';
 const TAG = buildFileTag('hash-credentials.ts', colors.bgCyan.black);
 
-
-
 const hashInfo = '$argon2d$v=19$m=4096,t=3,p=1$';
 
 /**************************************** TYPE DEFINITIONS ****************************************/

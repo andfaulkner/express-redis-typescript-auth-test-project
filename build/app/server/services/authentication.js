@@ -13,7 +13,7 @@ const passport = require("passport");
 exports.passportWJwtAndLocal = passport;
 const passport_local_1 = require("passport-local");
 const passport_jwt_1 = require("passport-jwt");
-const user_mock_1 = require("../models/user-mock");
+const user_model_1 = require("../models/user-model");
 const config_1 = require("../../../config/config");
 /******************************************** LOGGING *********************************************/
 const mad_logs_1 = require("mad-logs");
@@ -28,7 +28,7 @@ const TAG = mad_logs_1.buildFileTag('authentication.ts', colors.bgWhite.black);
 const localLogin = new passport_local_1.Strategy({}, function (username, password, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const user = yield user_mock_1.UserMock.findOne({ username });
+            const user = yield user_model_1.UserModel.findOne({ username });
             const isMatch = yield user.comparePassword(password);
             next(null, user);
         }
@@ -54,7 +54,7 @@ const jwtLogin = new passport_jwt_1.Strategy(jwtOptions, function (payload, done
     return __awaiter(this, void 0, void 0, function* () {
         console.log('auth-route: jwtStrategy:: payload:: ', util_1.inspect(payload, true, 10, true));
         try {
-            const user = user_mock_1.UserMock.findOne({ username: payload.username });
+            const user = user_model_1.UserModel.findOne({ username: payload.username });
             return done(null, user);
         }
         catch (e) {
@@ -62,7 +62,7 @@ const jwtLogin = new passport_jwt_1.Strategy(jwtOptions, function (payload, done
             return done(e);
         }
         // TODO set finding username by id up
-        // UserMock.findById(payload._id, function(err: Error | null, user: UserMock) {
+        // UserModel.findById(payload._id, function(err: Error | null, user: UserModel) {
         //     if (err) { return done(err, false); }
         //     if (user) { return done(null, user); }
         //     return done(null, false);

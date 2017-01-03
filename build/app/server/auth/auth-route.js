@@ -18,7 +18,7 @@ console.log(jwt);
 //*************************************** PROJECT MODULES *****************************************/
 const error_objects_1 = require("../../../shared/error-objects");
 const hash_credentials_1 = require("../services/hash-credentials");
-const user_mock_1 = require("../models/user-mock");
+const user_model_1 = require("../models/user-model");
 const authentication_1 = require("../services/authentication");
 /******************************************** LOGGING *********************************************/
 const mad_logs_1 = require("mad-logs");
@@ -42,51 +42,49 @@ app
     .use(bodyParser.json())
     .use(bodyParser.urlencoded({ extended: false }));
 //******************************************* HELPERS *********************************************/
-const handleAuthFail = (res, username) => {
-    const loginFailed = new error_objects_1.LoginFailedError(`Password does not match username`, `auth-route.ts`, username);
+const handlePasswordMismatch = (res, username) => {
+    const loginFailed = new error_objects_1.LoginError(`Password does not match username`, `auth-route.ts`, username);
     console.error(loginFailed.summary);
     return res.json(loginFailed);
 };
+/**
+ * Handler for successful authentication. Send a token to the user along with a success message.
+ * @param res - express response
+ * @param user - the user model object
+ */
+const handleAuthSuccess = (res, user) => {
+    console.log(`${TAG} handleAuthSuccess:: Auth succeeded for user: ${user.username}`);
+    const token = jwt.sign(user, config_1.config.auth.token.secret, { expiresIn: config_1.config.auth.expiry });
+    return res.status(200).json({
+        success: true,
+        message: 'win! User exists! Enjoy your token!',
+        username: user.username,
+        token
+    });
+};
+const handleAuthFail = (e, res) => {
+    e.message = (e.message ? (e.message + '\n') : '') + `${TAG} handleLoginReq : login failed.`;
+    console.error(`${TAG} handleLoginReq: Error: `, e.summary ? e.summary : e);
+    console.log('Login failed');
+    return res.redirect('/');
+};
 /**************************************** ROUTE FUNCTIONS *****************************************/
 const handleLoginReq = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    // console.log(inspect(req, false, 10, true));
-    // console.log(inspect(req.body, false, 10, true));
-    // let userInfo = setUserInfo(req.user);
-    // res.status(200).json({ token: 'JWT ' + generateToken(userInfo), user: userInfo });
+    // res.status(200).json({ token: 'JWT ' + generateToken(userInfo), user: setUserInfo(req.user) });
     const { username, password, admin } = req.body;
     console.log(`${TAG} handleLoginReq: req.body:`, util_1.inspect(req.body));
-    console.log(`${TAG} handleLoginReq: username:`, username, `\n${TAG} password:`, password);
     try {
-        const user = yield user_mock_1.UserMock.findOne({ username });
+        const user = yield user_model_1.UserModel.findOne({ username });
         console.log(`${TAG} handleLoginReq: found user:`, user);
         const isMatch = yield hash_credentials_1.verifyPassVsHash(password, user.pHash, true);
         console.log(`${TAG} handleLoginReq: isMatch?:`, isMatch);
-        if (!isMatch) {
-            return handleAuthFail(res, username);
-        }
-        var token = jwt.sign(user, config_1.config.auth.token.secret, {
-            expiresIn: 1440,
-        });
-        return res.status(200).json({ success: true, message: 'win! User exists! Enjoy your token!', username, token });
+        if (!isMatch)
+            return handlePasswordMismatch(res, username);
+        return handleAuthSuccess(res, user);
     }
     catch (e) {
-        e.message = (e.message ? (e.message + '\n') : '') + `${TAG} handleLoginReq : login failed.`;
-        console.error(`${TAG} handleLoginReq: Error: `, e.summary ? e.summary : e);
-        console.log('Login failed');
-        return res.redirect('/');
+        return handleAuthFail(e, res);
     }
-    // req.flash('info', 'Hi there!')
-    // const newToken = await buildJwt(userData);
-    // console.log(newToken);
-    // const storedToken = await userMockTokenData;
-    // console.log('\n\nstoredToken'); console.log(storedToken);
-    // if (newToken.token === storedToken.token) {
-    //     console.log('logged in successfully');
-    //     res.json({ loginSuccessful: 'true', token: 'TODO' });
-    // } else {
-    //     console.log('failed to log in');
-    //     res.redirect('/');
-    // }
 });
 const authedTest = (req, res) => {
     console.log('USER IS AUTHENTICATED!');

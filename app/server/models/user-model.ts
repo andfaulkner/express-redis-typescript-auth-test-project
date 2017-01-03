@@ -1,6 +1,6 @@
 //************************************* THIRD-PARTY MODULES ***************************************/
 import { _ } from '../../../shared/lodash-mixins';
-import { LoginFailedError } from '../../../shared/error-objects';
+import { LoginError } from '../../../shared/error-objects';
 
 //*************************************** PROJECT MODULES *****************************************/
 import { generateHash, verifyPassVsHash } from '../services/hash-credentials';
@@ -9,38 +9,38 @@ import { generateHash, verifyPassVsHash } from '../services/hash-credentials';
 import { buildFileTag } from 'mad-logs';
 import * as colors from 'colors';
 
-const TAG = buildFileTag('user-mock.ts', colors.bgBlue.white);
+const TAG = buildFileTag('user-model.ts', colors.bgBlue.white);
 
 //*************************************** TYPE DEFINITIONS ****************************************/
 type ErrorOrNull = Error | null;
 type CompareCb = (ErrorOrNull, Boolean) => any;
-type FindUserCb = (ErrorOrNull, UserMock) => void;
+type FindUserCb = (ErrorOrNull, UserModel) => void;
 
-const users: UserMock[] = [];
+const users: UserModel[] = [];
 
 /****************************************** CREATE USER *******************************************/
-export class UserMock {
+export class UserModel {
     public username: string;
     public pHash: string;
     public salt: string;
 
     // TODO remove this. it's insecure. Use only findById in future.
-    static findOne(args: { username: string, pHash?: string }): Promise<UserMock> {
+    static findOne(args: { username: string, pHash?: string }): Promise<UserModel> {
         return new Promise((resolve, reject) => {
-            console.log(`${TAG} UserMock.findOne:: args: `, args,
+            console.log(`${TAG} UserModel.findOne:: args: `, args,
                       `\n${TAG} users: (below)\n`, users);
 
             const user = _.find(users, (user) => (user.username === args.username) &&
                                                  (!args.pHash || (user.pHash === args.pHash)));
  
             if (user && user.username && _.isString(user.username)) {
-                console.log(`${TAG} UserMock.findOne:: found user ${user.username}`);
+                console.log(`${TAG} UserModel.findOne:: found user ${user.username}`);
                 return resolve(user);
             }
  
-            console.log(`${TAG} UserMock.findOne:: Failed to find user. Rejecting...`);
-            return reject(new LoginFailedError(`${TAG} UsersMock.Users array doesn't contain user`,
-                                                'user-mock.ts', args.username || ''));
+            console.log(`${TAG} UserModel.findOne:: Failed to find user. Rejecting...`);
+            return reject(new LoginError(`${TAG} UsersMock.Users array doesn't contain user`,
+                                                'user-model.ts', args.username || ''));
         });
     }
 
@@ -65,7 +65,7 @@ export class UserMock {
 
             return (isMatch 
                 ? resolve(true)
-                : reject(new LoginFailedError(`${TAG} Incorrect password`,
+                : reject(new LoginError(`${TAG} Incorrect password`,
                                               __filename, this.username)));
         });
     save = () => {
@@ -76,6 +76,6 @@ export class UserMock {
 }
 
 /******************************************* USER MOCK ********************************************/
-new UserMock({ username: 'meeka', password: 'test123' });
-new UserMock({ username: 'callie', password: 'yaybone' });
-new UserMock({ username: 'kyra', password: 'i_hate_everyone' });
+new UserModel({ username: 'meeka', password: 'test123' });
+new UserModel({ username: 'callie', password: 'yaybone' });
+new UserModel({ username: 'kyra', password: 'i_hate_everyone' });

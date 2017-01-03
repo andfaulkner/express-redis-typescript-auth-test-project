@@ -7,7 +7,7 @@ import * as passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 
-import { UserMock } from '../models/user-mock';
+import { UserModel } from '../models/user-model';
 import { config } from '../../../config/config';
 
 /******************************************** LOGGING *********************************************/
@@ -24,7 +24,7 @@ const TAG = buildFileTag('authentication.ts', colors.bgWhite.black);
  */
 const localLogin = new LocalStrategy({}, async function(username, password, next) {
     try {
-        const user = await UserMock.findOne({ username });
+        const user = await UserModel.findOne({ username });
         const isMatch = await user.comparePassword(password);
         next(null, user)
     } catch(e) {
@@ -50,7 +50,7 @@ const jwtLogin = new JwtStrategy(jwtOptions, async function(payload, done) {
     console.log('auth-route: jwtStrategy:: payload:: ', inspect(payload, true, 10, true));
 
     try {
-        const user = UserMock.findOne({ username: payload.username });
+        const user = UserModel.findOne({ username: payload.username });
         return done(null, user);
     } catch(e) {
         console.error(`${TAG}: jwtLogin: Error: `, e.summary);
@@ -58,7 +58,7 @@ const jwtLogin = new JwtStrategy(jwtOptions, async function(payload, done) {
     }
 
     // TODO set finding username by id up
-    // UserMock.findById(payload._id, function(err: Error | null, user: UserMock) {
+    // UserModel.findById(payload._id, function(err: Error | null, user: UserModel) {
     //     if (err) { return done(err, false); }
     //     if (user) { return done(null, user); }
     //     return done(null, false);

@@ -21,8 +21,12 @@ export const config = {
                     'hE56GyUHesiurijsrhDrsIth5munytuiyer7543yewj349ROdogijetjkIUHEF843ng845nfvmc' +
                     'nrEie50jijvnhOrsi867890t4ksOcm9n',
             issuer: 'CANImmunize',
-            audience: 'CANImmunize'
-            
-        }
+            audience: 'CANImmunize'   
+        },
+        expiry: 1440 // in minutes ?
     }
-};
+};                                   
+
+// ---> (cutoff of equivalent tokens to the right) --->                                                                                                                                                                                                                                                                                                                       |<---first non-identical char
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1lZWthIiwicEhhc2giOiJyNXY1dW9kTXUxcE9lc0owUllsY20wYWltbzVjcDZvQTRJSWpielIzbXEvT3ljZEU3VjV2YnckQVRrdjBoUlZsNVh1YzUvNE9rSHBNZHlMcm5odEM3ZkdpUXJwZmlmVEJUQSIsInNhbHQiOiLvv73vv73vv73vv73vv71M77-9Wk5677-9dEXvv71cXO-_vUbvv73vv73vv71cXO-_ve-_vVx1MDAwMO-_ve-_vSNvNHfvv73vv73vv73vv73vv71E77-9Xm9vIiwiaWF0IjoxNDgzNDAyNDY5LCJleHAiOjE0ODM0MDM5MDl9.oEwioVR41SHYaYMv441aho_wk4jIV6zjzeyMbojG5Es
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1lZWthIiwicEhhc2giOiJyNXY1dW9kTXUxcE9lc0owUllsY20wYWltbzVjcDZvQTRJSWpielIzbXEvT3ljZEU3VjV2YnckQVRrdjBoUlZsNVh1YzUvNE9rSHBNZHlMcm5odEM3ZkdpUXJwZmlmVEJUQSIsInNhbHQiOiLvv73vv73vv73vv73vv71M77-9Wk5677-9dEXvv71cXO-_vUbvv73vv73vv71cXO-_ve-_vVx1MDAwMO-_ve-_vSNvNHfvv73vv73vv73vv73vv71E77-9Xm9vIiwiaWF0IjoxNDgzNDAyNDU2LCJleHAiOjE0ODM0MDM4OTZ9.72o3-jZfoZL0IEtHdOw69YAn12GkM_GO5fWiJmjH_4k

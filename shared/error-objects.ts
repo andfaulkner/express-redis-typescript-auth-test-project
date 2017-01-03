@@ -130,24 +130,24 @@ export const UnknownLanguageError = (() => {
  * Use when an attempt to hash a string, Buffer, number, etc. fails.
  * 
  * @param {string} message        - error message
- * @param {string} filename       - file the error occurred in
+ * @param {string} fileName       - file the error occurred in
  * @param {string} strBeingHashed - string the hashing was attempted on
  * @param {string} algorithm      - hash algorithm used
  * @param {string} salt           - salt used in the generation attempt
  */
 export const HashGenerationError = (() => {
-    function HashGenerationError(message: string, filename: string, strBeingHashed: string,
+    function HashGenerationError(message: string, fileName: string, strBeingHashed: string,
                                  algorithm: string, salt: string | Buffer) {
         Error.captureStackTrace(this);
         this.message = message;
         this.name = `HashGenerationError`;
-        this.filename = filename;
+        this.fileName = fileName;
         this.strBeingHashed = strBeingHashed;
         this.algorithm = algorithm;
         this.salt = salt.toString();
 
         console.error(`${this.name}: Failed to generate hash of string: ${this.strBeingHashed}`);
-        console.error(`    Occurred in file:`, this.filename);
+        console.error(`    Occurred in file:`, this.fileName);
         console.error(`    Algorithm attempted:`, this.algorithm);
         console.error(`    Salt used in generation attempt:`, this.salt);
         console.error(`    stack:`, this.stack);
@@ -157,25 +157,32 @@ export const HashGenerationError = (() => {
     return HashGenerationError;
 })();
 
+export interface ILoginError {
+    (message: string, fileName: string, username?: string): void;
+    summary: string;
+    username: string;
+    fileName: string;
+    name: 'LoginError';
+    message: string;
+}
+
 /**
  * Use when an attempt to hash a string, Buffer, number, etc. fails.
  * 
  * @param {string} message        - error message
- * @param {string} filename       - file the error occurred in
+ * @param {string} fileName       - file the error occurred in
  */
-export const LoginFailedError = (() => {
-    function LoginFailedError(message: string, filename: string, usernameSought?: string) {
+export class LoginError extends Error {
+    public name = 'LoginError';
+    public summary: string;
+
+    constructor(public message: string, public fileName: string, public username: string = '') {
+        super();
         Error.captureStackTrace(this);
-        this.message = message;
-        this.name = `LoginFailedError`;
-        this.filename = filename;
-        this.usernameSought = usernameSought;
-        this.username = usernameSought;
-
-        this.summary = `[ERROR] In ${filename}:: ${this.name}: Failed to authenticate user${
-                       (this.usernameSought) ? ': ' + this.usernameSought : ''} - ${message}`;
+        this.summary = `[ERROR] In ${fileName}:: LoginError: Failed to authenticate user${
+                       (username) ? ': ' + username : ''}  --  ${message}`;
     }
+}
 
-    LoginFailedError.prototype = Object.create(Error.prototype);
-    return LoginFailedError;
-})();
+const er = new LoginError('boo', 'error-objects.ts', 'me');
+console.log(er);
